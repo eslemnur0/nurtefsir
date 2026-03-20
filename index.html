@@ -1,15 +1,4 @@
 <!DOCTYPE html>
-<html lang="en">
-
-  <head>
-    <meta charset="UTF-8">
-    <title>Untitled</title>
-    
-
-  </head>
-    
-  <body>
-  <!DOCTYPE html>
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
@@ -20,160 +9,452 @@
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Cinzel:wght@400;500;600&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
 
 <style>
-  :root {
-    --bg:           #FAFAFA;
-    --bg-alt:       #F3F4F4;
-    --bg-card:      #F0F0EE;
-    --text:         #333333;
-    --text-muted:   #4A5568;
-    --text-light:   #718096;
-    --accent:       #0F766E;
-    --accent-light: #14A394;
-    --accent-pale:  #E6F4F3;
-    --accent-deep:  #0A5752;
-    --border:       #D4D8D4;
-    --border-light: #E8EAEA;
-    --quote-border: #0F766E;
-    --gold:         #B5832A;
-    --gold-pale:    #FBF3E4;
-    --shadow-sm:    0 1px 4px rgba(0,0,0,.07);
-    --shadow-md:    0 4px 16px rgba(0,0,0,.10);
-    --shadow-lg:    0 8px 32px rgba(0,0,0,.12);
-    --radius:       6px;
-    --radius-lg:    12px;
-    --font-serif:   'Lora', 'Georgia', serif;
-    --font-display: 'Cinzel', 'Times New Roman', serif;
-    --font-sans:    'Source Sans 3', 'Helvetica Neue', sans-serif;
-    --transition:   all .25s cubic-bezier(.4,0,.2,1);
-    --max-prose:    70ch;
-    --sidebar-w:    280px;
-  }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; font-size: 17px; -webkit-text-size-adjust: 100%; }
-  body { font-family: var(--font-serif); background: var(--bg); color: var(--text); line-height: 1.75; min-height: 100vh; position: relative; overflow-x: hidden; }
-  #progress-bar { position: fixed; top: 0; left: 0; height: 3px; width: 0%; background: linear-gradient(90deg, var(--accent), var(--gold)); z-index: 1000; transition: width .1s linear; }
-  body::before { content: ''; position: fixed; top: 0; right: -200px; width: 600px; height: 600px; background: radial-gradient(circle at center, rgba(15,118,110,.04) 0%, transparent 70%); border-radius: 50%; pointer-events: none; z-index: 0; }
-  .top-nav { position: sticky; top: 0; z-index: 200; background: rgba(250,250,250,.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-light); padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; height: 60px; box-shadow: var(--shadow-sm); }
-  .nav-brand { font-family: var(--font-display); font-size: .9rem; color: var(--accent); letter-spacing: .08em; text-decoration: none; font-weight: 500; }
-  .menu-toggle { display: flex; align-items: center; gap: .5rem; background: none; border: 1px solid var(--border); border-radius: var(--radius); padding: .4rem .8rem; font-family: var(--font-sans); font-size: .85rem; color: var(--text-muted); cursor: pointer; transition: var(--transition); }
-  .menu-toggle:hover { background: var(--accent-pale); border-color: var(--accent); color: var(--accent); }
-  .menu-toggle svg { width: 16px; height: 16px; }
-  .shell { display: flex; position: relative; z-index: 1; }
-  .sidebar { width: var(--sidebar-w); flex-shrink: 0; position: sticky; top: 60px; height: calc(100vh - 60px); overflow-y: auto; padding: 2rem 1.25rem 2rem 1.5rem; border-right: 1px solid var(--border-light); background: var(--bg); scrollbar-width: thin; scrollbar-color: var(--border) transparent; transition: transform .35s cubic-bezier(.4,0,.2,1); }
-  .sidebar::-webkit-scrollbar { width: 4px; }
-  .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-  .sidebar-title { font-family: var(--font-sans); font-size: .7rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--text-light); margin-bottom: 1.25rem; padding-bottom: .6rem; border-bottom: 1px solid var(--border-light); }
-  .toc-list { list-style: none; }
-  .toc-list li { margin-bottom: .1rem; }
-  .toc-link { display: block; padding: .45rem .75rem; border-radius: var(--radius); text-decoration: none; font-family: var(--font-sans); font-size: .875rem; color: var(--text-muted); line-height: 1.35; transition: var(--transition); border-left: 2px solid transparent; }
-  .toc-link:hover { background: var(--accent-pale); color: var(--accent); border-left-color: var(--accent); padding-left: 1rem; }
-  .toc-link.active { background: var(--accent-pale); color: var(--accent); border-left-color: var(--accent); font-weight: 600; }
-  .toc-sub { font-size: .8rem; padding-left: 1.5rem; color: var(--text-light); }
-  .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.3); z-index: 190; opacity: 0; transition: opacity .3s; }
-  .main { flex: 1; min-width: 0; padding: 3rem 2rem 6rem; }
-  .hero { text-align: center; padding: 4rem 1rem 5rem; margin-bottom: 4rem; position: relative; overflow: hidden; }
-  .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(15,118,110,.06) 0%, transparent 70%); pointer-events: none; }
-  .hero-ornament { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 2rem; opacity: .5; }
-  .hero-ornament svg { width: 48px; height: 48px; color: var(--accent); }
-  .hero-ornament-line { width: 60px; height: 1px; background: linear-gradient(90deg, transparent, var(--accent)); }
-  .hero-ornament-line.right { background: linear-gradient(90deg, var(--accent), transparent); }
-  .hero-subtitle { font-family: var(--font-sans); font-size: .8rem; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.25rem; font-weight: 600; }
-  .hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 4vw, 2.5rem); color: var(--text); font-weight: 500; line-height: 1.25; letter-spacing: .03em; margin-bottom: 1.5rem; max-width: 600px; margin-left: auto; margin-right: auto; }
-  .hero-desc { font-family: var(--font-serif); font-style: italic; font-size: 1.05rem; color: var(--text-muted); max-width: 55ch; margin: 0 auto 2.5rem; line-height: 1.8; }
-  .hero-meta { display: flex; align-items: center; justify-content: center; gap: 2rem; flex-wrap: wrap; }
-  .hero-badge { font-family: var(--font-sans); font-size: .8rem; color: var(--text-light); display: flex; align-items: center; gap: .4rem; }
-  .hero-badge strong { color: var(--text-muted); font-weight: 600; }
-  .surah-card { background: var(--bg); border: 1px solid var(--border-light); border-radius: var(--radius-lg); margin-bottom: 4rem; overflow: hidden; box-shadow: var(--shadow-sm); opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease, box-shadow .3s; }
-  .surah-card.visible { opacity: 1; transform: translateY(0); }
-  .surah-card:hover { box-shadow: var(--shadow-md); }
-  .surah-header { background: linear-gradient(135deg, var(--accent-pale) 0%, rgba(250,250,250,0) 100%); padding: 2.5rem 2.5rem 2rem; border-bottom: 1px solid var(--border-light); position: relative; overflow: hidden; }
-  .surah-header::after { content: attr(data-number); position: absolute; right: 2rem; top: 50%; transform: translateY(-50%); font-family: var(--font-display); font-size: 5rem; color: var(--accent); opacity: .06; font-weight: 700; pointer-events: none; letter-spacing: -.02em; }
-  .surah-tag { font-family: var(--font-sans); font-size: .7rem; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-bottom: .75rem; display: flex; align-items: center; gap: .5rem; }
-  .surah-tag::before { content: ''; display: inline-block; width: 20px; height: 2px; background: var(--accent); border-radius: 1px; }
-  .surah-title { font-family: var(--font-display); font-size: clamp(1.4rem, 3.5vw, 2rem); color: var(--text); font-weight: 500; letter-spacing: .04em; line-height: 1.2; margin-bottom: .5rem; }
-  .surah-info { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 1rem; }
-  .surah-pill { font-family: var(--font-sans); font-size: .78rem; color: var(--text-light); background: var(--bg); border: 1px solid var(--border); border-radius: 20px; padding: .25rem .75rem; display: flex; align-items: center; gap: .35rem; }
-  .surah-pill svg { width: 12px; height: 12px; opacity: .7; }
-  .surah-body { padding: 2.5rem 2.5rem 3rem; }
-  .surah-body > p { max-width: var(--max-prose); margin-bottom: 1.4em; text-align: left; hanging-punctuation: first last; }
-  .section-title { font-family: var(--font-display); font-size: 1.05rem; letter-spacing: .05em; color: var(--accent-deep); font-weight: 500; margin: 2.5rem 0 1rem; padding-bottom: .5rem; border-bottom: 1px solid var(--border-light); max-width: var(--max-prose); }
-  .verse-display { background: var(--gold-pale); border-left: 3px solid var(--gold); border-radius: 0 var(--radius) var(--radius) 0; padding: 1.25rem 1.5rem; margin: 1.75rem 0; max-width: var(--max-prose); font-style: italic; font-size: 1rem; color: var(--text-muted); line-height: 1.8; }
-  .verse-display .verse-arabic { font-family: var(--font-display); font-size: 1.1rem; color: var(--gold); font-style: normal; display: block; margin-bottom: .5rem; letter-spacing: .02em; }
-  .verse-display .verse-ref { display: block; margin-top: .75rem; font-size: .8rem; font-family: var(--font-sans); font-style: normal; color: var(--text-light); letter-spacing: .04em; }
-  blockquote, .imam-quote { border-left: 3px solid var(--quote-border); background: var(--bg-card); border-radius: 0 var(--radius) var(--radius) 0; padding: 1.1rem 1.5rem 1.1rem 1.5rem; margin: 1.5rem 0; max-width: var(--max-prose); font-style: italic; color: var(--text-muted); font-size: .97rem; line-height: 1.8; position: relative; }
-  blockquote::before { content: '\201C'; position: absolute; left: 1rem; top: .25rem; font-size: 3rem; color: var(--accent); opacity: .15; font-family: Georgia, serif; line-height: 1; }
-  .quote-attr { display: block; margin-top: .75rem; font-style: normal; font-size: .8rem; font-family: var(--font-sans); color: var(--accent); font-weight: 600; letter-spacing: .04em; }
-  .term { font-style: italic; font-size: .92em; color: var(--text-muted); }
-  .key { color: var(--accent); font-weight: 600; }
-  .highlight-box { background: var(--accent-pale); border: 1px solid rgba(15,118,110,.2); border-radius: var(--radius-lg); padding: 1.5rem 1.75rem; margin: 2rem 0; max-width: var(--max-prose); }
-  .highlight-box-title { font-family: var(--font-sans); font-size: .75rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin-bottom: .75rem; display: flex; align-items: center; gap: .5rem; }
-  .highlight-box-title::before { content: ''; display: inline-block; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; }
-  .highlight-box p { font-size: .95rem; color: var(--text-muted); margin-bottom: .75em; }
-  .highlight-box p:last-child { margin-bottom: 0; }
-  .numbered-list { list-style: none; counter-reset: item; max-width: var(--max-prose); margin: 1rem 0 1.5rem; }
-  .numbered-list li { counter-increment: item; display: flex; gap: 1rem; margin-bottom: .9rem; align-items: flex-start; font-size: .96rem; color: var(--text-muted); line-height: 1.7; }
-  .numbered-list li::before { content: counter(item); flex-shrink: 0; width: 1.6rem; height: 1.6rem; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-sans); font-size: .72rem; font-weight: 700; margin-top: .15rem; }
-  .ornament-divider { display: flex; align-items: center; gap: 1.25rem; margin: 2.5rem 0; max-width: var(--max-prose); }
-  .ornament-divider::before, .ornament-divider::after { content: ''; flex: 1; height: 1px; background: var(--border-light); }
-  .ornament-divider span { font-size: 1rem; color: var(--accent); opacity: .4; }
-  .surah-summary { background: linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%); border-radius: var(--radius-lg); padding: 2rem 2.25rem; margin: 2.5rem 0 0; color: white; max-width: var(--max-prose); }
-  .surah-summary h4 { font-family: var(--font-sans); font-size: .7rem; letter-spacing: .18em; text-transform: uppercase; opacity: .7; margin-bottom: .75rem; font-weight: 600; }
-  .surah-summary p { font-size: .96rem; opacity: .9; line-height: 1.75; }
-  .site-footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border-light); font-family: var(--font-sans); font-size: .82rem; color: var(--text-light); }
-  .site-footer .footer-ornament { font-size: 1.5rem; color: var(--accent); opacity: .25; display: block; margin-bottom: 1rem; }
-  #back-to-top { position: fixed; bottom: 2rem; right: 2rem; width: 44px; height: 44px; background: var(--accent); color: white; border: none; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-md); opacity: 0; transform: translateY(10px); transition: var(--transition); z-index: 100; }
-  #back-to-top.visible { opacity: 1; transform: translateY(0); }
-  #back-to-top:hover { background: var(--accent-deep); transform: translateY(-2px); }
-  #back-to-top svg { width: 18px; height: 18px; }
-  .reading-time { display: inline-flex; align-items: center; gap: .4rem; font-family: var(--font-sans); font-size: .78rem; color: var(--text-light); background: var(--bg-alt); padding: .2rem .6rem; border-radius: 20px; border: 1px solid var(--border-light); }
-  @media (max-width: 900px) {
-    .sidebar { position: fixed; top: 60px; left: 0; height: calc(100vh - 60px); z-index: 195; transform: translateX(-100%); box-shadow: var(--shadow-lg); }
-    .sidebar.open { transform: translateX(0); }
-    .sidebar-overlay.active { display: block; opacity: 1; }
-    .main { padding: 2rem 1.25rem 5rem; }
-    .surah-header { padding: 1.75rem 1.5rem 1.5rem; }
-    .surah-body { padding: 1.5rem 1.5rem 2rem; }
-  }
-  @media (max-width: 600px) {
-    html { font-size: 16px; }
-    .hero { padding: 3rem 1rem 3.5rem; }
-    .surah-header { padding: 1.5rem 1.25rem; }
-    .surah-body { padding: 1.25rem 1.25rem 1.75rem; }
-  }
-  @media print {
-    .top-nav, .sidebar, #back-to-top, #progress-bar { display: none; }
-    .main { padding: 0; }
-    .surah-card { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; }
-  }
-  @keyframes fadeInUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
-  .hero-ornament { animation: fadeInUp .6s ease both; }
-  .hero-subtitle { animation: fadeInUp .6s .1s ease both; }
-  .hero-title    { animation: fadeInUp .6s .2s ease both; }
-  .hero-desc     { animation: fadeInUp .6s .3s ease both; }
-  .hero-meta     { animation: fadeInUp .6s .4s ease both; }
+/* ─── CSS Custom Properties ─── */
+:root {
+  --bg:           #FAFAFA;
+  --bg-alt:       #F3F4F4;
+  --bg-card:      #F0F0EE;
+  --text:         #333333;
+  --text-muted:   #4A5568;
+  --text-light:   #718096;
+  --accent:       #0F766E;
+  --accent-light: #14A394;
+  --accent-pale:  #E6F4F3;
+  --accent-deep:  #0A5752;
+  --border:       #D4D8D4;
+  --border-light: #E8EAEA;
+  --quote-border: #0F766E;
+  --gold:         #B5832A;
+  --gold-pale:    #FBF3E4;
+  --shadow-sm:    0 1px 4px rgba(0,0,0,.07);
+  --shadow-md:    0 4px 16px rgba(0,0,0,.10);
+  --shadow-lg:    0 8px 32px rgba(0,0,0,.14);
+  --radius:       6px;
+  --radius-lg:    12px;
+  --font-serif:   'Lora', 'Georgia', serif;
+  --font-display: 'Cinzel', 'Times New Roman', serif;
+  --font-sans:    'Source Sans 3', 'Helvetica Neue', sans-serif;
+  --transition:   all .25s cubic-bezier(.4,0,.2,1);
+  --max-prose:    70ch;
+  --sidebar-w:    280px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 17px; -webkit-text-size-adjust: 100%; }
+body { font-family: var(--font-serif); background: var(--bg); color: var(--text); line-height: 1.75; min-height: 100vh; position: relative; overflow-x: hidden; }
+
+#progress-bar { position: fixed; top: 0; left: 0; height: 3px; width: 0%; background: linear-gradient(90deg, var(--accent), var(--gold)); z-index: 1000; transition: width .1s linear; }
+
+body::before { content: ''; position: fixed; top: 0; right: -200px; width: 600px; height: 600px; background: radial-gradient(circle at center, rgba(15,118,110,.04) 0%, transparent 70%); border-radius: 50%; pointer-events: none; z-index: 0; }
+
+/* ─── Top Navigation ─── */
+.top-nav { position: sticky; top: 0; z-index: 200; background: rgba(250,250,250,.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-light); padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; height: 60px; box-shadow: var(--shadow-sm); }
+.nav-brand { font-family: var(--font-display); font-size: .9rem; color: var(--accent); letter-spacing: .08em; text-decoration: none; font-weight: 500; }
+.nav-right { display: flex; align-items: center; gap: .75rem; }
+.menu-toggle { display: flex; align-items: center; gap: .5rem; background: none; border: 1px solid var(--border); border-radius: var(--radius); padding: .4rem .8rem; font-family: var(--font-sans); font-size: .85rem; color: var(--text-muted); cursor: pointer; transition: var(--transition); }
+.menu-toggle:hover { background: var(--accent-pale); border-color: var(--accent); color: var(--accent); }
+.menu-toggle svg { width: 16px; height: 16px; }
+.btn-new-post { display: flex; align-items: center; gap: .45rem; background: var(--accent); color: white; border: none; border-radius: var(--radius); padding: .4rem .9rem; font-family: var(--font-sans); font-size: .82rem; font-weight: 600; cursor: pointer; transition: var(--transition); letter-spacing: .02em; }
+.btn-new-post:hover { background: var(--accent-deep); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+.btn-new-post svg { width: 14px; height: 14px; }
+
+/* ─── Layout ─── */
+.shell { display: flex; position: relative; z-index: 1; }
+.sidebar { width: var(--sidebar-w); flex-shrink: 0; position: sticky; top: 60px; height: calc(100vh - 60px); overflow-y: auto; padding: 2rem 1.25rem 2rem 1.5rem; border-right: 1px solid var(--border-light); background: var(--bg); scrollbar-width: thin; scrollbar-color: var(--border) transparent; transition: transform .35s cubic-bezier(.4,0,.2,1); }
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+.sidebar-title { font-family: var(--font-sans); font-size: .7rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--text-light); margin-bottom: 1.25rem; padding-bottom: .6rem; border-bottom: 1px solid var(--border-light); }
+.toc-list { list-style: none; }
+.toc-list li { margin-bottom: .1rem; }
+.toc-link { display: block; padding: .45rem .75rem; border-radius: var(--radius); text-decoration: none; font-family: var(--font-sans); font-size: .875rem; color: var(--text-muted); line-height: 1.35; transition: var(--transition); border-left: 2px solid transparent; }
+.toc-link:hover { background: var(--accent-pale); color: var(--accent); border-left-color: var(--accent); padding-left: 1rem; }
+.toc-link.active { background: var(--accent-pale); color: var(--accent); border-left-color: var(--accent); font-weight: 600; }
+.toc-sub { font-size: .8rem; padding-left: 1.5rem; color: var(--text-light); }
+.sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.3); z-index: 190; opacity: 0; transition: opacity .3s; }
+
+/* ─── Main Content ─── */
+.main { flex: 1; min-width: 0; padding: 3rem 2rem 6rem; }
+
+/* ─── Hero ─── */
+.hero { text-align: center; padding: 4rem 1rem 5rem; margin-bottom: 4rem; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(15,118,110,.06) 0%, transparent 70%); pointer-events: none; }
+.hero-ornament { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 2rem; opacity: .5; }
+.hero-ornament svg { width: 48px; height: 48px; color: var(--accent); }
+.hero-ornament-line { width: 60px; height: 1px; background: linear-gradient(90deg, transparent, var(--accent)); }
+.hero-ornament-line.right { background: linear-gradient(90deg, var(--accent), transparent); }
+.hero-subtitle { font-family: var(--font-sans); font-size: .8rem; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.25rem; font-weight: 600; }
+.hero-title { font-family: var(--font-display); font-size: clamp(1.6rem, 4vw, 2.5rem); color: var(--text); font-weight: 500; line-height: 1.25; letter-spacing: .03em; margin-bottom: 1.5rem; max-width: 600px; margin-left: auto; margin-right: auto; }
+.hero-desc { font-family: var(--font-serif); font-style: italic; font-size: 1.05rem; color: var(--text-muted); max-width: 55ch; margin: 0 auto 2.5rem; line-height: 1.8; }
+.hero-meta { display: flex; align-items: center; justify-content: center; gap: 2rem; flex-wrap: wrap; }
+.hero-badge { font-family: var(--font-sans); font-size: .8rem; color: var(--text-light); display: flex; align-items: center; gap: .4rem; }
+.hero-badge strong { color: var(--text-muted); font-weight: 600; }
+.reading-time { display: inline-flex; align-items: center; gap: .4rem; font-family: var(--font-sans); font-size: .78rem; color: var(--text-light); background: var(--bg-alt); padding: .2rem .6rem; border-radius: 20px; border: 1px solid var(--border-light); }
+
+/* ─── Surah Card ─── */
+.surah-card { background: var(--bg); border: 1px solid var(--border-light); border-radius: var(--radius-lg); margin-bottom: 4rem; overflow: hidden; box-shadow: var(--shadow-sm); opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease, box-shadow .3s; }
+.surah-card.visible { opacity: 1; transform: translateY(0); }
+.surah-card:hover { box-shadow: var(--shadow-md); }
+.surah-header { background: linear-gradient(135deg, var(--accent-pale) 0%, rgba(250,250,250,0) 100%); padding: 2.5rem 2.5rem 2rem; border-bottom: 1px solid var(--border-light); position: relative; overflow: hidden; }
+.surah-header::after { content: attr(data-number); position: absolute; right: 2rem; top: 50%; transform: translateY(-50%); font-family: var(--font-display); font-size: 5rem; color: var(--accent); opacity: .06; font-weight: 700; pointer-events: none; letter-spacing: -.02em; }
+.surah-tag { font-family: var(--font-sans); font-size: .7rem; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-bottom: .75rem; display: flex; align-items: center; gap: .5rem; }
+.surah-tag::before { content: ''; display: inline-block; width: 20px; height: 2px; background: var(--accent); border-radius: 1px; }
+.surah-title { font-family: var(--font-display); font-size: clamp(1.4rem, 3.5vw, 2rem); color: var(--text); font-weight: 500; letter-spacing: .04em; line-height: 1.2; margin-bottom: .5rem; }
+.surah-info { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 1rem; }
+.surah-pill { font-family: var(--font-sans); font-size: .78rem; color: var(--text-light); background: var(--bg); border: 1px solid var(--border); border-radius: 20px; padding: .25rem .75rem; display: flex; align-items: center; gap: .35rem; }
+.surah-pill svg { width: 12px; height: 12px; opacity: .7; }
+.surah-body { padding: 2.5rem 2.5rem 3rem; }
+.surah-body > p { max-width: var(--max-prose); margin-bottom: 1.4em; text-align: left; hanging-punctuation: first last; }
+
+/* ─── Content Elements ─── */
+.section-title { font-family: var(--font-display); font-size: 1.05rem; letter-spacing: .05em; color: var(--accent-deep); font-weight: 500; margin: 2.5rem 0 1rem; padding-bottom: .5rem; border-bottom: 1px solid var(--border-light); max-width: var(--max-prose); }
+.verse-display { background: var(--gold-pale); border-left: 3px solid var(--gold); border-radius: 0 var(--radius) var(--radius) 0; padding: 1.25rem 1.5rem; margin: 1.75rem 0; max-width: var(--max-prose); font-style: italic; font-size: 1rem; color: var(--text-muted); line-height: 1.8; }
+.verse-display .verse-arabic { font-family: var(--font-display); font-size: 1.1rem; color: var(--gold); font-style: normal; display: block; margin-bottom: .5rem; letter-spacing: .02em; }
+.verse-display .verse-ref { display: block; margin-top: .75rem; font-size: .8rem; font-family: var(--font-sans); font-style: normal; color: var(--text-light); letter-spacing: .04em; }
+blockquote, .imam-quote { border-left: 3px solid var(--quote-border); background: var(--bg-card); border-radius: 0 var(--radius) var(--radius) 0; padding: 1.1rem 1.5rem 1.1rem 1.5rem; margin: 1.5rem 0; max-width: var(--max-prose); font-style: italic; color: var(--text-muted); font-size: .97rem; line-height: 1.8; position: relative; }
+blockquote::before { content: '\201C'; position: absolute; left: 1rem; top: .25rem; font-size: 3rem; color: var(--accent); opacity: .15; font-family: Georgia, serif; line-height: 1; }
+.quote-attr { display: block; margin-top: .75rem; font-style: normal; font-size: .8rem; font-family: var(--font-sans); color: var(--accent); font-weight: 600; letter-spacing: .04em; }
+.term { font-style: italic; font-size: .92em; color: var(--text-muted); }
+.key { color: var(--accent); font-weight: 600; }
+.highlight-box { background: var(--accent-pale); border: 1px solid rgba(15,118,110,.2); border-radius: var(--radius-lg); padding: 1.5rem 1.75rem; margin: 2rem 0; max-width: var(--max-prose); }
+.highlight-box-title { font-family: var(--font-sans); font-size: .75rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin-bottom: .75rem; display: flex; align-items: center; gap: .5rem; }
+.highlight-box-title::before { content: ''; display: inline-block; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; }
+.highlight-box p { font-size: .95rem; color: var(--text-muted); margin-bottom: .75em; }
+.highlight-box p:last-child { margin-bottom: 0; }
+.numbered-list { list-style: none; counter-reset: item; max-width: var(--max-prose); margin: 1rem 0 1.5rem; }
+.numbered-list li { counter-increment: item; display: flex; gap: 1rem; margin-bottom: .9rem; align-items: flex-start; font-size: .96rem; color: var(--text-muted); line-height: 1.7; }
+.numbered-list li::before { content: counter(item); flex-shrink: 0; width: 1.6rem; height: 1.6rem; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-sans); font-size: .72rem; font-weight: 700; margin-top: .15rem; }
+.ornament-divider { display: flex; align-items: center; gap: 1.25rem; margin: 2.5rem 0; max-width: var(--max-prose); }
+.ornament-divider::before, .ornament-divider::after { content: ''; flex: 1; height: 1px; background: var(--border-light); }
+.ornament-divider span { font-size: 1rem; color: var(--accent); opacity: .4; }
+.surah-summary { background: linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%); border-radius: var(--radius-lg); padding: 2rem 2.25rem; margin: 2.5rem 0 0; color: white; max-width: var(--max-prose); }
+.surah-summary h4 { font-family: var(--font-sans); font-size: .7rem; letter-spacing: .18em; text-transform: uppercase; opacity: .7; margin-bottom: .75rem; font-weight: 600; }
+.surah-summary p { font-size: .96rem; opacity: .9; line-height: 1.75; }
+
+/* ─── Footer ─── */
+.site-footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border-light); font-family: var(--font-sans); font-size: .82rem; color: var(--text-light); }
+.site-footer .footer-ornament { font-size: 1.5rem; color: var(--accent); opacity: .25; display: block; margin-bottom: 1rem; }
+
+/* ─── Back to Top ─── */
+#back-to-top { position: fixed; bottom: 2rem; right: 2rem; width: 44px; height: 44px; background: var(--accent); color: white; border: none; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-md); opacity: 0; transform: translateY(10px); transition: var(--transition); z-index: 100; }
+#back-to-top.visible { opacity: 1; transform: translateY(0); }
+#back-to-top:hover { background: var(--accent-deep); transform: translateY(-2px); }
+#back-to-top svg { width: 18px; height: 18px; }
+
+/* ─── CMS EDITOR PANEL ──────────────────────────────────── */
+
+/* Overlay */
+#editor-overlay { position: fixed; inset: 0; background: rgba(10,30,28,.45); z-index: 490; display: none; opacity: 0; transition: opacity .3s; backdrop-filter: blur(3px); }
+#editor-overlay.active { display: block; opacity: 1; }
+
+/* Panel */
+.editor-panel { position: fixed; top: 0; right: 0; width: 700px; max-width: 100vw; height: 100vh; background: var(--bg); box-shadow: -8px 0 40px rgba(0,0,0,.15); z-index: 500; display: flex; flex-direction: column; transform: translateX(100%); transition: transform .38s cubic-bezier(.4,0,.2,1); border-left: 1px solid var(--border-light); }
+.editor-panel.open { transform: translateX(0); }
+
+/* Panel Header */
+.ep-header { display: flex; align-items: center; justify-content: space-between; padding: 0 1.25rem; height: 56px; border-bottom: 1px solid var(--border-light); background: var(--accent); color: white; flex-shrink: 0; }
+.ep-header-left { display: flex; align-items: center; gap: 1rem; }
+.ep-logo { font-family: var(--font-display); font-size: .85rem; letter-spacing: .1em; opacity: .9; }
+.ep-tabs { display: flex; gap: 2px; }
+.ep-tab { background: transparent; border: none; color: rgba(255,255,255,.7); font-family: var(--font-sans); font-size: .8rem; font-weight: 600; padding: .3rem .75rem; border-radius: var(--radius); cursor: pointer; transition: var(--transition); letter-spacing: .04em; }
+.ep-tab:hover { color: white; background: rgba(255,255,255,.12); }
+.ep-tab.active { color: white; background: rgba(255,255,255,.2); }
+.ep-header-right { display: flex; align-items: center; gap: .5rem; }
+.ep-btn-publish { background: white; color: var(--accent); border: none; border-radius: var(--radius); padding: .35rem .9rem; font-family: var(--font-sans); font-size: .8rem; font-weight: 700; cursor: pointer; transition: var(--transition); letter-spacing: .03em; }
+.ep-btn-publish:hover { background: var(--gold-pale); color: var(--accent-deep); }
+.ep-btn-close { background: transparent; border: none; color: rgba(255,255,255,.8); cursor: pointer; width: 32px; height: 32px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; transition: var(--transition); }
+.ep-btn-close:hover { background: rgba(255,255,255,.15); color: white; }
+.ep-btn-close svg { width: 18px; height: 18px; }
+
+/* Panel Views */
+.ep-view { display: none; flex: 1; flex-direction: column; overflow: hidden; }
+.ep-view.active { display: flex; }
+
+/* ── Write View ── */
+.ep-meta { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border-light); background: var(--bg-alt); flex-shrink: 0; display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
+.ep-meta-full { grid-column: 1 / -1; }
+.ep-input { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: .5rem .75rem; font-family: var(--font-sans); font-size: .875rem; color: var(--text); outline: none; transition: var(--transition); }
+.ep-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(15,118,110,.1); }
+.ep-input::placeholder { color: var(--text-light); }
+.ep-input-label { font-family: var(--font-sans); font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text-light); margin-bottom: .3rem; display: block; }
+
+/* Toolbar */
+.ep-toolbar { display: flex; align-items: center; gap: 2px; padding: .5rem .75rem; border-bottom: 1px solid var(--border-light); background: var(--bg); flex-wrap: wrap; flex-shrink: 0; }
+.ep-tool-group { display: flex; align-items: center; gap: 2px; }
+.ep-tool-sep { width: 1px; height: 22px; background: var(--border); margin: 0 4px; flex-shrink: 0; }
+.ep-tool { background: none; border: 1px solid transparent; border-radius: 5px; padding: .28rem .5rem; cursor: pointer; font-family: var(--font-sans); font-size: .75rem; font-weight: 600; color: var(--text-muted); transition: var(--transition); white-space: nowrap; display: flex; align-items: center; gap: .3rem; }
+.ep-tool:hover { background: var(--accent-pale); border-color: var(--accent); color: var(--accent); }
+.ep-tool svg { width: 13px; height: 13px; }
+.ep-tool.tool-key { color: var(--accent); }
+.ep-tool.tool-key:hover { background: var(--accent); color: white; }
+.ep-tool.tool-term { color: var(--text-muted); font-style: italic; }
+.ep-tool.tool-gold { color: var(--gold); }
+.ep-tool.tool-gold:hover { background: var(--gold-pale); border-color: var(--gold); color: var(--gold); }
+
+/* Editor Content Area */
+.ep-content-wrap { flex: 1; overflow-y: auto; padding: 1.5rem; }
+.ep-content-wrap::-webkit-scrollbar { width: 5px; }
+.ep-content-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+#editor-content {
+  min-height: 300px;
+  outline: none;
+  font-family: var(--font-serif);
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--text);
+}
+/* Style blocks inside the editor to look like the site */
+#editor-content p { margin-bottom: 1.2em; max-width: var(--max-prose); }
+#editor-content h3.section-title { font-family: var(--font-display); font-size: 1rem; letter-spacing: .05em; color: var(--accent-deep); font-weight: 500; margin: 2rem 0 .75rem; padding-bottom: .4rem; border-bottom: 1px solid var(--border-light); }
+#editor-content blockquote { border-left: 3px solid var(--quote-border); background: var(--bg-card); border-radius: 0 var(--radius) var(--radius) 0; padding: 1rem 1.25rem; margin: 1.25rem 0; font-style: italic; color: var(--text-muted); font-size: .95rem; line-height: 1.75; position: relative; }
+#editor-content blockquote::before { content: '\201C'; position: absolute; left: .75rem; top: .1rem; font-size: 2.5rem; color: var(--accent); opacity: .12; font-family: Georgia; line-height: 1; }
+#editor-content .highlight-box { background: var(--accent-pale); border: 1px solid rgba(15,118,110,.2); border-radius: var(--radius-lg); padding: 1.25rem 1.5rem; margin: 1.5rem 0; }
+#editor-content .verse-display { background: var(--gold-pale); border-left: 3px solid var(--gold); border-radius: 0 var(--radius) var(--radius) 0; padding: 1rem 1.25rem; margin: 1.25rem 0; font-style: italic; color: var(--text-muted); }
+#editor-content .verse-arabic { font-family: var(--font-display); color: var(--gold); font-style: normal; display: block; margin-bottom: .4rem; }
+#editor-content .surah-summary { background: linear-gradient(135deg, var(--accent), var(--accent-deep)); border-radius: var(--radius-lg); padding: 1.5rem 1.75rem; margin: 1.5rem 0; color: white; }
+#editor-content .surah-summary h4 { font-family: var(--font-sans); font-size: .68rem; letter-spacing: .16em; text-transform: uppercase; opacity: .7; margin-bottom: .6rem; font-weight: 600; }
+#editor-content .numbered-list { list-style: none; counter-reset: item; margin: .75rem 0 1.25rem; }
+#editor-content .numbered-list li { counter-increment: item; display: flex; gap: .85rem; margin-bottom: .75rem; align-items: flex-start; font-size: .95rem; color: var(--text-muted); }
+#editor-content .numbered-list li::before { content: counter(item); flex-shrink: 0; width: 1.5rem; height: 1.5rem; background: var(--accent); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-sans); font-size: .7rem; font-weight: 700; margin-top: .1rem; }
+#editor-content .ornament-divider { display: flex; align-items: center; gap: 1rem; margin: 2rem 0; }
+#editor-content .ornament-divider::before, #editor-content .ornament-divider::after { content: ''; flex: 1; height: 1px; background: var(--border-light); }
+#editor-content .ornament-divider span { color: var(--accent); opacity: .4; }
+#editor-content .key { color: var(--accent); font-weight: 600; }
+#editor-content .term { font-style: italic; font-size: .92em; color: var(--text-muted); }
+
+/* Editor placeholder */
+#editor-content:empty::before { content: 'Yazmaya başlayın veya yukarıdaki araçlardan bir blok ekleyin...'; color: var(--text-light); font-style: italic; pointer-events: none; }
+
+/* ── Preview View ── */
+.ep-preview-wrap { flex: 1; overflow-y: auto; padding: 2rem 1.5rem; }
+.ep-preview-wrap::-webkit-scrollbar { width: 5px; }
+.ep-preview-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+.ep-preview-card { background: var(--bg); border: 1px solid var(--border-light); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); }
+.ep-preview-header { background: linear-gradient(135deg, var(--accent-pale) 0%, rgba(250,250,250,0) 100%); padding: 2rem 2rem 1.5rem; border-bottom: 1px solid var(--border-light); position: relative; overflow: hidden; }
+.ep-preview-header::after { content: attr(data-number); position: absolute; right: 1.5rem; top: 50%; transform: translateY(-50%); font-family: var(--font-display); font-size: 4rem; color: var(--accent); opacity: .06; font-weight: 700; pointer-events: none; }
+.ep-preview-body { padding: 2rem; }
+.ep-preview-body p { max-width: var(--max-prose); margin-bottom: 1.4em; line-height: 1.75; }
+
+/* ── Manage View ── */
+.ep-manage-wrap { flex: 1; overflow-y: auto; padding: 1.25rem; }
+.ep-manage-wrap::-webkit-scrollbar { width: 5px; }
+.ep-manage-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+.ep-manage-empty { text-align: center; padding: 4rem 2rem; font-family: var(--font-sans); font-size: .9rem; color: var(--text-light); }
+.ep-manage-empty span { font-size: 2rem; display: block; margin-bottom: 1rem; opacity: .3; }
+.ep-article-card { background: var(--bg); border: 1px solid var(--border-light); border-radius: var(--radius-lg); padding: 1rem 1.25rem; margin-bottom: .75rem; display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; transition: var(--transition); }
+.ep-article-card:hover { border-color: var(--accent); box-shadow: var(--shadow-sm); }
+.ep-article-info { flex: 1; min-width: 0; }
+.ep-article-title { font-family: var(--font-display); font-size: .95rem; color: var(--text); font-weight: 500; margin-bottom: .25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ep-article-meta { font-family: var(--font-sans); font-size: .75rem; color: var(--text-light); display: flex; gap: .75rem; flex-wrap: wrap; }
+.ep-article-actions { display: flex; gap: .4rem; flex-shrink: 0; }
+.ep-act-btn { background: none; border: 1px solid var(--border); border-radius: var(--radius); padding: .3rem .65rem; font-family: var(--font-sans); font-size: .75rem; cursor: pointer; transition: var(--transition); color: var(--text-muted); }
+.ep-act-btn:hover { background: var(--accent-pale); border-color: var(--accent); color: var(--accent); }
+.ep-act-btn.delete:hover { background: #fff0f0; border-color: #e53e3e; color: #e53e3e; }
+
+/* CMS article badge */
+.surah-card[data-cms] .surah-header { position: relative; }
+.cms-edit-btn { position: absolute; top: 1rem; right: 1rem; z-index: 10; background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: .3rem .7rem; font-family: var(--font-sans); font-size: .72rem; font-weight: 600; color: var(--accent); cursor: pointer; opacity: 0; transition: var(--transition); display: flex; align-items: center; gap: .3rem; }
+.surah-card[data-cms]:hover .cms-edit-btn { opacity: 1; }
+.cms-edit-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
+
+/* ─── Responsive ─── */
+@media (max-width: 900px) {
+  .sidebar { position: fixed; top: 60px; left: 0; height: calc(100vh - 60px); z-index: 195; transform: translateX(-100%); box-shadow: var(--shadow-lg); }
+  .sidebar.open { transform: translateX(0); }
+  .sidebar-overlay.active { display: block; opacity: 1; }
+  .main { padding: 2rem 1.25rem 5rem; }
+  .surah-header { padding: 1.75rem 1.5rem 1.5rem; }
+  .surah-body { padding: 1.5rem 1.5rem 2rem; }
+  .editor-panel { width: 100vw; }
+  .ep-meta { grid-template-columns: 1fr; }
+  .ep-meta-full { grid-column: 1; }
+}
+@media (max-width: 600px) {
+  html { font-size: 16px; }
+  .hero { padding: 3rem 1rem 3.5rem; }
+  .surah-header { padding: 1.5rem 1.25rem; }
+  .surah-body { padding: 1.25rem 1.25rem 1.75rem; }
+  .btn-new-post span { display: none; }
+}
+@media print {
+  .top-nav, .sidebar, #back-to-top, #progress-bar, .editor-panel, #editor-overlay, .cms-edit-btn { display: none; }
+  .main { padding: 0; }
+  .surah-card { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; }
+}
+
+/* ─── Animations ─── */
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+.hero-ornament { animation: fadeInUp .6s ease both; }
+.hero-subtitle  { animation: fadeInUp .6s .1s ease both; }
+.hero-title     { animation: fadeInUp .6s .2s ease both; }
+.hero-desc      { animation: fadeInUp .6s .3s ease both; }
+.hero-meta      { animation: fadeInUp .6s .4s ease both; }
 </style>
 </head>
 <body>
 
 <div id="progress-bar"></div>
 
+<!-- ── Top Navigation ── -->
 <nav class="top-nav">
   <a href="#" class="nav-brand">SON SÛRELER TEFSİRİ</a>
-  <button class="menu-toggle" id="menu-btn" aria-label="İçindekiler">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
-    </svg>
-    İçindekiler
-  </button>
+  <div class="nav-right">
+    <button class="btn-new-post" id="btn-new-post" onclick="openEditor()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <span>Yeni Yazı</span>
+    </button>
+    <button class="menu-toggle" id="menu-btn" aria-label="İçindekiler">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      İçindekiler
+    </button>
+  </div>
 </nav>
 
+<!-- Sidebar Overlay -->
 <div class="sidebar-overlay" id="overlay"></div>
+
+<!-- ══════════════════════════════════════════════
+     CMS EDITOR PANEL
+════════════════════════════════════════════════ -->
+<div id="editor-overlay"></div>
+
+<div class="editor-panel" id="editor-panel">
+
+  <!-- Header -->
+  <div class="ep-header">
+    <div class="ep-header-left">
+      <span class="ep-logo">YAZI PANELİ</span>
+      <div class="ep-tabs">
+        <button class="ep-tab active" data-view="write" onclick="showView('write')">Yaz</button>
+        <button class="ep-tab" data-view="preview" onclick="showView('preview')">Önizle</button>
+        <button class="ep-tab" data-view="manage" onclick="showView('manage')">Yazılarım</button>
+      </div>
+    </div>
+    <div class="ep-header-right">
+      <button class="ep-btn-publish" onclick="publishArticle()">Yayımla</button>
+      <button class="ep-btn-close" onclick="closeEditor()" title="Kapat">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── WRITE VIEW ── -->
+  <div class="ep-view active" id="view-write">
+
+    <!-- Meta Fields -->
+    <div class="ep-meta">
+      <div class="ep-meta-full">
+        <label class="ep-input-label">Başlık</label>
+        <input id="ep-title" class="ep-input" type="text" placeholder="Örn: Fatiha Sûresi">
+      </div>
+      <div>
+        <label class="ep-input-label">Dönem / Etiket</label>
+        <input id="ep-tag" class="ep-input" type="text" placeholder="Mekke Dönemi · 7 Âyet">
+      </div>
+      <div>
+        <label class="ep-input-label">Sûre Numarası</label>
+        <input id="ep-number" class="ep-input" type="text" placeholder="1">
+      </div>
+      <div class="ep-meta-full">
+        <label class="ep-input-label">Bilgi Etiketleri (virgülle ayırın)</label>
+        <input id="ep-pills" class="ep-input" type="text" placeholder="1. Sûre, Namazın Esası, Yedi Tekrarlanan">
+      </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="ep-toolbar">
+      <!-- Block elements -->
+      <div class="ep-tool-group">
+        <button class="ep-tool" onclick="insertBlock('p')" title="Normal paragraf ekle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="18" y2="18"/></svg> Paragraf
+        </button>
+        <button class="ep-tool" onclick="insertBlock('h3')" title="Bölüm başlığı ekle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h8M4 18h12"/></svg> Başlık
+        </button>
+      </div>
+      <div class="ep-tool-sep"></div>
+      <!-- Quote & Highlight -->
+      <div class="ep-tool-group">
+        <button class="ep-tool" onclick="insertBlock('blockquote')" title="Alıntı kutusu ekle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg> Alıntı
+        </button>
+        <button class="ep-tool" onclick="insertBlock('highlight')" title="Vurgu kutusu ekle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="12" cy="12" r="3" fill="currentColor" opacity=".3"/></svg> Vurgu Kutusu
+        </button>
+        <button class="ep-tool tool-gold" onclick="insertBlock('verse')" title="Âyet kutusu ekle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> Âyet
+        </button>
+      </div>
+      <div class="ep-tool-sep"></div>
+      <!-- Lists & Summary -->
+      <div class="ep-tool-group">
+        <button class="ep-tool" onclick="insertBlock('list')" title="Numaralı liste ekle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="9" y1="6" x2="20" y2="6"/><line x1="9" y1="12" x2="20" y2="12"/><line x1="9" y1="18" x2="20" y2="18"/><circle cx="4" cy="6" r="1.5" fill="currentColor"/><circle cx="4" cy="12" r="1.5" fill="currentColor"/><circle cx="4" cy="18" r="1.5" fill="currentColor"/></svg> Liste
+        </button>
+        <button class="ep-tool" onclick="insertBlock('summary')" title="Özet kartı ekle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg> Özet Kart
+        </button>
+        <button class="ep-tool" onclick="insertBlock('divider')" title="Bölücü çizgi ekle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" y1="12" x2="22" y2="12"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg> Bölücü
+        </button>
+      </div>
+      <div class="ep-tool-sep"></div>
+      <!-- Inline formats -->
+      <div class="ep-tool-group">
+        <button class="ep-tool tool-key" onclick="wrapInline('key')" title="Seçili metni anahtar kelime yap (yeşil-kalın)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="7.5" cy="15.5" r="5.5"/><path d="M21 2l-9.6 9.6M15.5 7.5l3 3"/></svg> Anahtar
+        </button>
+        <button class="ep-tool tool-term" onclick="wrapInline('term')" title="Seçili metni dini terim yap (italik)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="4" x2="10" y2="4"/><line x1="14" y1="20" x2="5" y2="20"/><line x1="15" y1="4" x2="9" y2="20"/></svg> Terim
+        </button>
+      </div>
+      <div class="ep-tool-sep"></div>
+      <!-- Basic formatting -->
+      <div class="ep-tool-group">
+        <button class="ep-tool" onclick="document.execCommand('bold')" title="Kalın">
+          <strong>K</strong>
+        </button>
+        <button class="ep-tool" onclick="document.execCommand('italic')" title="İtalik">
+          <em>İ</em>
+        </button>
+      </div>
+    </div>
+
+    <!-- Editor Content -->
+    <div class="ep-content-wrap">
+      <div id="editor-content" contenteditable="true" spellcheck="true"></div>
+    </div>
+
+  </div><!-- /view-write -->
+
+  <!-- ── PREVIEW VIEW ── -->
+  <div class="ep-view" id="view-preview">
+    <div class="ep-preview-wrap">
+      <div class="ep-preview-card">
+        <div class="ep-preview-header" id="preview-header">
+          <div class="surah-tag" id="preview-tag"></div>
+          <h2 class="surah-title" id="preview-title">Başlık</h2>
+          <div class="surah-info" id="preview-pills"></div>
+        </div>
+        <div class="ep-preview-body" id="preview-body"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MANAGE VIEW ── -->
+  <div class="ep-view" id="view-manage">
+    <div class="ep-manage-wrap" id="manage-list"></div>
+  </div>
+
+</div><!-- /editor-panel -->
+
 
 <div class="shell">
 
+  <!-- Sidebar / TOC -->
   <aside class="sidebar" id="sidebar" aria-label="İçindekiler">
     <p class="sidebar-title">İçindekiler</p>
-    <ul class="toc-list">
+    <ul class="toc-list" id="toc-list">
       <li><a href="#kafirun" class="toc-link">Kâfirûn Sûresi</a></li>
       <li><a href="#kafirun-nuzul" class="toc-link toc-sub">· İniş Sebebi</a></li>
       <li><a href="#kafirun-tefsir" class="toc-link toc-sub">· Âyetlerin Tefsiri</a></li>
@@ -197,8 +478,10 @@
     </ul>
   </aside>
 
+  <!-- Main Content -->
   <main class="main" id="main">
 
+    <!-- Hero -->
     <section class="hero">
       <div class="hero-ornament">
         <div class="hero-ornament-line"></div>
@@ -231,10 +514,7 @@
         <div class="surah-tag">Mekke Dönemi · 6 Âyet</div>
         <h2 class="surah-title">Kâfirûn Sûresi</h2>
         <div class="surah-info">
-          <span class="surah-pill">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-            109. Sûre
-          </span>
+          <span class="surah-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>109. Sûre</span>
           <span class="surah-pill">Tevhidin Beyannamesi</span>
           <span class="surah-pill">Kur'an'ın ¼'ü Gibi</span>
         </div>
@@ -242,10 +522,7 @@
       <div class="surah-body">
         <p><span class="key">Kâfirûn sûresi</span> altı âyetten oluşur. En yaygın görüşe göre <span class="key">Mekke'de</span> inmiştir; İbn Mes'ûd (radıyallahü anh) ve âlimlerin büyük çoğunluğu bu kanaattedir. Bazı rivayetlerde ise Medine'de indiği de geçer; İbn Abbâs'tan bir görüş bu yöndedir. Yine de esas kabul edilen, sûrenin <span class="term">Mekkî</span> olduğudur.</p>
         <p>Bu sûreye sadece Kâfirûn sûresi denmez. Ona <span class="term">İhlâs</span>, <span class="term">İbadet</span>, <span class="term">Münâbeze</span>, <span class="term">Mükeşkişe</span> veya <span class="term">Mukaşkışa</span> gibi adlar da verilmiştir. Bu isimlerin ortak manası şudur: Bu sûre, kulun inancını temizler, şirkle arasına çizgi çeker, kalbi karışıklıktan kurtarır.</p>
-        <blockquote>
-          Bu sûre, "ben Allah'a kullukta ortak kabul etmem" diyen bir kesinlik sûresidir. Bazı âlimler Kâfirûn ile İhlâs sûrelerine birlikte <strong>"iki arındırıcı sûre"</strong> demiştir. Biri "Allah birdir" der, öteki "öyleyse O'na başkası karıştırılamaz" der.
-          <span class="quote-attr">— Tefsir Geleneği</span>
-        </blockquote>
+        <blockquote>Bu sûre, "ben Allah'a kullukta ortak kabul etmem" diyen bir kesinlik sûresidir. Bazı âlimler Kâfirûn ile İhlâs sûrelerine birlikte <strong>"iki arındırıcı sûre"</strong> demiştir. Biri "Allah birdir" der, öteki "öyleyse O'na başkası karıştırılamaz" der.<span class="quote-attr">— Tefsir Geleneği</span></blockquote>
         <div class="highlight-box">
           <div class="highlight-box-title">Fazileti</div>
           <p>En meşhur rivayet şudur: <em>"Kim Kâfirûn sûresini okursa, sanki Kur'an'ın dörtte birini okumuş gibi olur."</em> Âlimler bunu şöyle açıklamıştır: Kur'an'ın büyük bir kısmı insanın neye inanacağı, neyi reddedeceği, nasıl yaşayacağı ve sonunda neyle karşılaşacağı üzerinedir. Kâfirûn sûresi bunların içinde özellikle inancın temizlenmesi ve şirkin reddi kısmını çok güçlü biçimde topladığı için "dörtte bir" gibi anılmıştır.</p>
@@ -254,10 +531,7 @@
         <div id="kafirun-nuzul"></div>
         <h3 class="section-title">İniş Sebebi</h3>
         <p>Sûrenin iniş sebebiyle ilgili rivayetlerin hepsi aynı ana olayı anlatır. <span class="key">Kureyş</span>'in ileri gelenlerinden bir grup, aralarında <span class="key">Velîd b. Muğîre</span> ve <span class="key">Ebû Cehil</span>'in de bulunduğu söylenen bu topluluk, Resûlullah'a açıkça şunu teklif etti:</p>
-        <blockquote>
-          "Gel bir uzlaşma bulalım. Bir süre sen bizim ilahlarımıza kulluk et, bir süre biz senin Rabbine kulluk edelim. Senin yolun daha iyiyse biz ondan pay almış oluruz; bizim yolumuz daha iyiyse sen pay almış olursun."
-          <span class="quote-attr">— Müşriklerin Teklifi (Rivayetlerden)</span>
-        </blockquote>
+        <blockquote>"Gel bir uzlaşma bulalım. Bir süre sen bizim ilahlarımıza kulluk et, bir süre biz senin Rabbine kulluk edelim. Senin yolun daha iyiyse biz ondan pay almış oluruz; bizim yolumuz daha iyiyse sen pay almış olursun."<span class="quote-attr">— Müşriklerin Teklifi (Rivayetlerden)</span></blockquote>
         <p>Resûlullah bu teklifi kabul etmedi. "Rabbimden gelecek hükmü beklerim" buyurdu. Bunun üzerine bu sûre indi. Ardından Resûlullah <span class="key">Mescid-i Haram</span>'a gidip Kureyş'in ileri gelenlerinin ortasında ayağa kalktı ve bu sûreyi onların yüzüne karşı okudu.</p>
         <div id="kafirun-tefsir"></div>
         <h3 class="section-title">"De ki" Emrinin Hikmeti</h3>
@@ -272,10 +546,7 @@
         <p>Burada <span class="term">tehdit</span>, <span class="term">ilişik kesme</span>, <span class="term">ayrım</span>, <span class="term">hesap</span> ve <span class="term">ceza-karşılık</span> manası birlikte vardır. Hepsinin özü birdir: <span class="key">Hak ile bâtıl birbirine karışmayacaktır.</span></p>
         <h3 class="section-title">Tasavvufî Boyut</h3>
         <p><span class="term">Tasavvuf</span> ehli bu sûreyi iç âlem açısından da okumuştur. Onlara göre dışarıdaki putlar kadar, içerdeki putlar da vardır. İnsan bazen taş puta secde etmez ama kalbini mala, makama, şöhrete, halkın övgüsüne, korkuya, <span class="term">hevâya</span>, nefse verir. Kâfirûn sûresi işte bu gizli ortaklara da "hayır" der.</p>
-        <div class="surah-summary">
-          <h4>Sûrenin Özü</h4>
-          <p>Hem bir iman beyannamesi, hem bir şirkten uzak durma metni, hem bir gece duası, hem namaz sûresi, hem ahlak dersi, hem tasavvufî arınma metni, hem de akideyi koruyan bir kaledir. Yumuşak olmak başka şeydir, hak ile bâtılı karıştırmak başka şeydir.</p>
-        </div>
+        <div class="surah-summary"><h4>Sûrenin Özü</h4><p>Hem bir iman beyannamesi, hem bir şirkten uzak durma metni, hem bir gece duası, hem namaz sûresi, hem ahlak dersi, hem tasavvufî arınma metni, hem de akideyi koruyan bir kaledir. Yumuşak olmak başka şeydir, hak ile bâtılı karıştırmak başka şeydir.</p></div>
       </div>
     </article>
 
@@ -292,24 +563,14 @@
       </header>
       <div class="surah-body">
         <p>Medine döneminde nazil olan ve üç âyetten oluşan <span class="key">Nasr Sûresi</span>, Kur'an-ı Kerîm'de bir bütün olarak en son inen sûredir. <span class="key">İbn Abbâs</span> ve diğer büyük sahabelerin bildirdiğine göre bu sûre, <span class="key">Peygamber Efendimiz</span>'e (sallallahü aleyhi ve sellem) bu dünyadan göçme vaktinin yaklaştığını haber veren ilâhî bir şifredir. Bu yüzdendir ki bu sûreye <span class="term">Tevdi</span> — yani <em>"Veda Sûresi"</em> — de denilmiştir.</p>
-        <blockquote>
-          Bu sûre indiğinde ashab-ı kiram fetih ve zafer müjdesiyle sevinirken, amcası <strong>Hz. Abbas</strong> ağlamaya başlamıştır. Efendimiz "Niçin ağlıyorsun amca?" diye sorduğunda, "Kendi ölüm haberini kendin verdin" demiş, Efendimiz de "Tam senin dediğin gibi" diyerek onu doğrulamıştır.
-          <span class="quote-attr">— Hz. Abbas (r.a.) rivayeti</span>
-        </blockquote>
+        <blockquote>Bu sûre indiğinde ashab-ı kiram fetih ve zafer müjdesiyle sevinirken, amcası <strong>Hz. Abbas</strong> ağlamaya başlamıştır. Efendimiz "Niçin ağlıyorsun amca?" diye sorduğunda, "Kendi ölüm haberini kendin verdin" demiş, Efendimiz de "Tam senin dediğin gibi" diyerek onu doğrulamıştır.<span class="quote-attr">— Hz. Abbas (r.a.) rivayeti</span></blockquote>
         <p><span class="key">Hz. Ömer</span>'in, yaşı küçük olmasına rağmen <span class="key">İbn Abbâs</span>'ı Bedir gazilerine denk tutup meclisine almasının sırrı da bu sûredir. Sahabeler bu duruma itiraz edince Hz. Ömer onları toplayıp Nasr sûresinin manasını sormuş, <span class="key">İbn Abbâs</span>, <em>"Bu, Resûlullah'ın ecelidir, Allah ona vefatının yaklaştığını bildiriyor"</em> diyerek sûrenin <span class="term">bâtınî</span> manasını çözmüştür.</p>
         <div id="nasr-a1"></div>
         <h3 class="section-title">Birinci Âyet: İlâhî Yardım ve Fethin Gelişi</h3>
-        <div class="verse-display">
-          <span class="verse-arabic">إِذَا جَاءَ نَصْرُ اللَّهِ وَالْفَتْحُ</span>
-          "Allah'ın yardımı ve fetih geldiği zaman…"
-          <span class="verse-ref">Nasr Sûresi, 1. Âyet</span>
-        </div>
+        <div class="verse-display"><span class="verse-arabic">إِذَا جَاءَ نَصْرُ اللَّهِ وَالْفَتْحُ</span>"Allah'ın yardımı ve fetih geldiği zaman…"<span class="verse-ref">Nasr Sûresi, 1. Âyet</span></div>
         <p><span class="key">Nasr</span> ve <span class="key">Fetih</span> arasındaki fark şudur: Nasr, bir amaca ulaşmak için verilen ilâhî destektir; Fetih ise o yardımın sonucunda kapalı olan kapıların açılmasıdır. Nasr <span class="term">sebeptir</span>, Fetih ise <span class="term">sonuçtur</span>. Âlimlerin çoğunluğuna göre buradaki Fetih, <em>"Fetihlerin Fethi"</em> olan <span class="key">Mekke'nin fethidir</span>.</p>
         <p>Hicretin 8. yılı Ramazan ayında 10.000 kişilik bir orduyla Mekke'ye girilirken Efendimiz o kadar <span class="term">mütevazıydı</span> ki, devesinin üzerinde Allah'a şükründen dolayı başı adeta eğere değiyordu. Mekke'ye girildiğinde Efendimiz kan dökmemiş, <span class="key">Kureyş</span>lilere:</p>
-        <blockquote>
-          "Benden ne bekliyorsunuz?" diye sormuştur. Onlar "Sen kerem sahibi bir kardeşsin" deyince, "Gidin, hepiniz serbestsiniz" buyurarak eşsiz bir ahlak sergilemiştir.
-          <span class="quote-attr">— Mekke Fethi Rivayeti (Tülekâ)</span>
-        </blockquote>
+        <blockquote>"Benden ne bekliyorsunuz?" diye sormuştur. Onlar "Sen kerem sahibi bir kardeşsin" deyince, "Gidin, hepiniz serbestsiniz" buyurarak eşsiz bir ahlak sergilemiştir.<span class="quote-attr">— Mekke Fethi Rivayeti (Tülekâ)</span></blockquote>
         <div id="nasr-a2"></div>
         <h3 class="section-title">İkinci Âyet: İnsanların Bölük Bölük İslam'a Girmesi</h3>
         <p>Mekke fethedilince Arap kabileleri aralarında şöyle konuştular: <em>"Muhammed, Allah'ın Fil Ordusundan koruduğu o kutsal Harem halkına bile galip geldiyse, o kesinlikle hak peygamberdir."</em> Bu mantıkla, eskiden birer ikişer Müslüman olan insanlar, artık kabileler hâlinde, <span class="term">fevc fevc</span> (dalga dalga) İslam'a girmeye başladılar.</p>
@@ -328,10 +589,7 @@
           <li>Mânevî yolculuk (<span class="term">seyr-u sülûk</span>) sonsuzdur; her üst makama yükseldiğinde bir önceki hali için istiğfar etmiştir.</li>
           <li>İntikam almaktan vazgeçip affetmeye teşviktir; Allah ona "istiğfar et" deyince, o da Mekkelileri affetmiştir.</li>
         </ul>
-        <div class="surah-summary">
-          <h4>Sûrenin Mesajı</h4>
-          <p>Bu sûre, bir yandan İslam'ın en büyük zaferini kutlarken, diğer yandan her kemâlin bir sonu olduğunu ve en büyük zafer anlarında bile kibre kapılmadan başı eğerek Allah'a sığınmayı öğreten, Peygamberimizin ayrılık hüznüyle zafer coşkusunu aynı anda yaşatan ilâhî bir mucizedir.</p>
-        </div>
+        <div class="surah-summary"><h4>Sûrenin Mesajı</h4><p>Bu sûre, bir yandan İslam'ın en büyük zaferini kutlarken, diğer yandan her kemâlin bir sonu olduğunu ve en büyük zafer anlarında bile kibre kapılmadan başı eğerek Allah'a sığınmayı öğreten, Peygamberimizin ayrılık hüznüyle zafer coşkusunu aynı anda yaşatan ilâhî bir mucizedir.</p></div>
       </div>
     </article>
 
@@ -348,20 +606,13 @@
       </header>
       <div class="surah-body">
         <p>Mekke'nin o zorlu günlerinde, hakikatin ışığı yeni yeni parlamaya başladığı bir dönemde inen bu mübarek sûre, beş âyetten oluşur. Kâinatın Efendisi şöyle buyurmuşlardır:</p>
-        <blockquote>
-          "Kim Tebbet sûresini okursa, dilerim ki Allah, onunla Ebû Leheb'i aynı yurtta (cehennemde) bir araya getirmez."
-          <span class="quote-attr">— Resûlullah (s.a.v.)</span>
-        </blockquote>
+        <blockquote>"Kim Tebbet sûresini okursa, dilerim ki Allah, onunla Ebû Leheb'i aynı yurtta (cehennemde) bir araya getirmez."<span class="quote-attr">— Resûlullah (s.a.v.)</span></blockquote>
         <div id="tebbet-nuzul"></div>
         <h3 class="section-title">İniş Sebebi: Safa Tepesi Hâdisesi</h3>
         <p>Yüce Allah, <em>"En yakın akrabalarını uyar"</em> emrini verdiğinde, <span class="key">Peygamber Efendimiz</span> <span class="key">Safa tepesine</span> çıkmış ve <em>"Ya Sabâhâh!"</em> diye seslenmişti. Kureyş toplandığında Efendimiz onları uyarınca, öz amcası olan <span class="key">Ebû Leheb</span> kibrine yenik düşerek eline bir taş aldı ve <em>"Tebben lek! Bizi bunun için mi buraya topladın!"</em> diyerek hakaret etti.</p>
         <div id="tebbet-ayetler"></div>
         <h3 class="section-title">1. Âyet: İki Elin Helâki</h3>
-        <div class="verse-display">
-          <span class="verse-arabic">تَبَّتْ يَدَا أَبِي لَهَبٍ وَتَبَّ</span>
-          "Ebû Leheb'in iki eli kurusun (helâk olsun), kurudu da (zaten helâk oldu)."
-          <span class="verse-ref">Tebbet Sûresi, 1. Âyet</span>
-        </div>
+        <div class="verse-display"><span class="verse-arabic">تَبَّتْ يَدَا أَبِي لَهَبٍ وَتَبَّ</span>"Ebû Leheb'in iki eli kurusun (helâk olsun), kurudu da (zaten helâk oldu)."<span class="verse-ref">Tebbet Sûresi, 1. Âyet</span></div>
         <p>Ayette özellikle <em>"iki eli"</em> ifadesinin kullanılması çok derin manalar taşır. Arapçada bir insanın "elleri", onun bütün varlığını, gücünü ve bizzat kendisini temsil eder (<span class="term">mecaz-ı mürsel</span>). Yani <em>"onun bütün varlığı, dini, dünyası, öncesi ve sonrası helâk olsun"</em> demektir.</p>
         <p>Peki, ismi <span class="term">Abdüluzza</span> iken, Kur'an onu neden <span class="key">Ebû Leheb</span> (Alevin Babası) künyesiyle andı? Bunun üç hikmeti vardır:</p>
         <ul class="numbered-list">
@@ -372,10 +623,7 @@
         <div class="ornament-divider"><span>✦</span></div>
         <h3 class="section-title">3. Âyet: Kur'an'ın İcazı ve Kader Meselesi</h3>
         <p>Bu âyet, Kur'an'ın mucizelerinden birini barındırır. <span class="key">Allah</span>, <span class="key">Ebû Leheb</span> henüz sağken onun asla iman etmeyeceğini ve cehenneme gireceğini kesin bir dille haber vermiştir. <span class="term">Kelâm</span> âlimleri buna <span class="term">"teklif-i mâ lâ yutâk"</span> penceresinden bakmışlardır.</p>
-        <blockquote>
-          Ebû Leheb Kur'an'a iman etmekle emrolunmuştu, ancak Kur'an onun iman etmeyeceğini söylüyordu. Bu zıtlık gibi görünen durum, aslında Allah'ın ezelî ilminin (<span class="term">kaderin</span>) kusursuzluğunu gösterir. Yüce Allah, o katılaşmış kalbin kendi özgür iradesiyle hiçbir zaman hakkı seçmeyeceğini biliyordu ve bunu peşinen ilan etti.
-          <span class="quote-attr">— Kelâm Alimleri</span>
-        </blockquote>
+        <blockquote>Ebû Leheb Kur'an'a iman etmekle emrolunmuştu, ancak Kur'an onun iman etmeyeceğini söylüyordu. Bu zıtlık gibi görünen durum, aslında Allah'ın ezelî ilminin (<span class="term">kaderin</span>) kusursuzluğunu gösterir. Yüce Allah, o katılaşmış kalbin kendi özgür iradesiyle hiçbir zaman hakkı seçmeyeceğini biliyordu ve bunu peşinen ilan etti.<span class="quote-attr">— Kelâm Alimleri</span></blockquote>
         <h3 class="section-title">4. Âyet: Odun Hamalı Kadın</h3>
         <p><span class="key">Ebû Leheb</span>'in eşi, Mekke'nin soylularından <span class="key">Ebû Süfyan</span>'ın kız kardeşi <span class="key">Ümmü Cemil</span>'dir. Soylu ve zengin olmasına rağmen kalbi hasetle kararmış bu kadın, kocasının en büyük destekçisiydi. Ayette ona <span class="term">"odun hamalı"</span> (<span class="term">hammâletel hatab</span>) denmesi, hem gerçek hem mecaz anlamları olan çok katmanlı bir tasvirdir.</p>
         <p><strong>Gerçek mana:</strong> Gece karanlığında dağlardan dikenli çalıları toplar ve Efendimizin geçeceği yollara, kapısının önüne sererdi. Fakat Allah'ın himayesindeki Peygamber, o dikenlerin üzerine sanki ipeğe basarmış gibi basardı.</p>
@@ -415,29 +663,14 @@
         </ul>
         <div id="ihlas-ayetler"></div>
         <h3 class="section-title">1. Âyet: Ehad — Mutlak Birlik</h3>
-        <div class="verse-display">
-          <span class="verse-arabic">قُلْ هُوَ اللَّهُ أَحَدٌ</span>
-          "De ki: O Allah'tır, birdir."
-          <span class="verse-ref">İhlâs Sûresi, 1. Âyet</span>
-        </div>
+        <div class="verse-display"><span class="verse-arabic">قُلْ هُوَ اللَّهُ أَحَدٌ</span>"De ki: O Allah'tır, birdir."<span class="verse-ref">İhlâs Sûresi, 1. Âyet</span></div>
         <p>Dilimizde "Bir" kelimesinin karşılığı olan <span class="term">Vahid</span> ile ayette geçen <span class="term">Ehad</span> arasında çok ince ama dağlar kadar büyük bir fark vardır. <span class="term">Vahid</span> sayılarla ilgilidir; bir derseniz, iki ve üç de var demektir. Ancak <span class="term">Ehad</span> kelimesi mutlaktır; başka bir varlığın olma ihtimalini kökünden siler.</p>
-        <blockquote>
-          İrfan ehli bu "O, Allah, Birdir" sıralamasını manevî bir yolculuğun üç makamı olarak görürler. En yüce makam olan <span class="term">mukarrebler</span> için sadece "O" demek yeterlidir; ikinci sıradaki <span class="term">sağcılar</span> "O, Allah'tır" derler; üçüncü sıradaki <span class="term">solcular</span> ise birden fazla ilah olabileceğini düşündükleri için onlara "Sadece Birdir" kelimesi eklenmiştir.
-          <span class="quote-attr">— Tasavvuf Geleneği</span>
-        </blockquote>
+        <blockquote>İrfan ehli bu "O, Allah, Birdir" sıralamasını manevî bir yolculuğun üç makamı olarak görürler. En yüce makam olan <span class="term">mukarrebler</span> için sadece "O" demek yeterlidir; ikinci sıradaki <span class="term">sağcılar</span> "O, Allah'tır" derler; üçüncü sıradaki <span class="term">solcular</span> ise birden fazla ilah olabileceğini düşündükleri için onlara "Sadece Birdir" kelimesi eklenmiştir.<span class="quote-attr">— Tasavvuf Geleneği</span></blockquote>
         <h3 class="section-title">2. Âyet: Allah'üs-Samed</h3>
-        <div class="verse-display">
-          <span class="verse-arabic">اللَّهُ الصَّمَدُ</span>
-          "Allah Samed'dir."
-          <span class="verse-ref">İhlâs Sûresi, 2. Âyet</span>
-        </div>
+        <div class="verse-display"><span class="verse-arabic">اللَّهُ الصَّمَدُ</span>"Allah Samed'dir."<span class="verse-ref">İhlâs Sûresi, 2. Âyet</span></div>
         <p><span class="key">Samed</span> kelimesi üç büyük manayı barındırır: <strong>(1)</strong> Felaket ve musibet anlarında herkesin koşup yardım istediği yüce kapı — tüm kâinatın saniye saniye O'na muhtaç olduğu, ama O'nun hiç kimseye muhtaç olmadığı yegâne zenginlik. <strong>(2)</strong> İçi boş olmayan, yemeyen, içmeyen, som ve yekpare olan — Allah'ı yaratıklara benzeten her iftiraya karşı cevap. <strong>(3)</strong> Her şey yok olup gittikten sonra geriye sadece O'nun kalması.</p>
         <h3 class="section-title">3. ve 4. Âyetler: Doğurmadı, Doğmadı</h3>
-        <div class="verse-display">
-          <span class="verse-arabic">لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ</span>
-          "Doğurmadı, doğurulmadı. Hiç kimse O'na denk olmadı."
-          <span class="verse-ref">İhlâs Sûresi, 3-4. Âyet</span>
-        </div>
+        <div class="verse-display"><span class="verse-arabic">لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ</span>"Doğurmadı, doğurulmadı. Hiç kimse O'na denk olmadı."<span class="verse-ref">İhlâs Sûresi, 3-4. Âyet</span></div>
         <p>Bu dört âyet, baştan sona çelikten bir mantık zinciri gibi birbirine bağlıdır:</p>
         <ul class="numbered-list">
           <li><strong>Birinci âyet</strong>, <span class="term">teslis</span> inancını ve her türlü ortaklık iddiasını yıkarak Allah'ın parçalanmazlığını ilan eder.</li>
@@ -445,10 +678,7 @@
           <li><strong>Üçüncü âyet</strong>, sebep-sonuç ve soy zincirini yıkarak O'nun kimsenin babası veya çocuğu olmadığını beyan eder.</li>
           <li><strong>Dördüncü âyet</strong>, putları Allah'a eş koşan gizli ve açık her türlü <span class="term">şirki</span> bitirir.</li>
         </ul>
-        <div class="surah-summary">
-          <h4>Sûrenin Gücü</h4>
-          <p>İnsan aklının aradığı o güvenilir ve kusursuz kapı da, kalbin aradığı sığınılacak sonsuz zenginlik de buradadır. Cennetin kapılarını aralayan bu sırlar, sadece okuyan dillerde değil, idrak eden kalplerde gerçek manasını bulur.</p>
-        </div>
+        <div class="surah-summary"><h4>Sûrenin Gücü</h4><p>İnsan aklının aradığı o güvenilir ve kusursuz kapı da, kalbin aradığı sığınılacak sonsuz zenginlik de buradadır. Cennetin kapılarını aralayan bu sırlar, sadece okuyan dillerde değil, idrak eden kalplerde gerçek manasını bulur.</p></div>
       </div>
     </article>
 
@@ -465,10 +695,7 @@
       </header>
       <div class="surah-body">
         <p>Felak sûresi ve ardındaki <span class="key">Nâs sûresi</span>, insanı <span class="term">nifak</span> hastalıklarından ve her türlü şerden kurtarıp şifaya kavuşturdukları için birlikte <span class="term">El-Mukaşkışeteyn</span> olarak anılır. Bu iki sûre, Kur'an-ı Kerîm'in son kalesi ve sığınma dualarının zirvesidir.</p>
-        <blockquote>
-          Peygamber Efendimiz fırtınalı bir gecede <strong>Ukbe bin Âmir</strong>'e dönerek: "Ey Ukbe, bunlarla Allah'a sığın. Hiçbir insan bu ikisinden daha üstün bir şeyle Allah'a sığınmış değildir" buyurmuştur.
-          <span class="quote-attr">— Ukbe b. Âmir (r.a.) rivayeti</span>
-        </blockquote>
+        <blockquote>Peygamber Efendimiz fırtınalı bir gecede <strong>Ukbe bin Âmir</strong>'e dönerek: "Ey Ukbe, bunlarla Allah'a sığın. Hiçbir insan bu ikisinden daha üstün bir şeyle Allah'a sığınmış değildir" buyurmuştur.<span class="quote-attr">— Ukbe b. Âmir (r.a.) rivayeti</span></blockquote>
         <div id="felak-nuzul"></div>
         <h3 class="section-title">İniş Sebebi: Sihir Hâdisesi</h3>
         <p>Rivayetlere göre, Yahudilerin önde gelenlerinden <span class="key">Lebid</span> adlı büyücü, Efendimizin saç tellerini kullanarak bir yay kirişine on bir adet düğüm atmış, içlerine iğneler batırarak şiddetli bir büyü yapmıştır. Bu büyülü malzemeyi de kuyu dibindeki büyük bir kayanın altına saklamıştır.</p>
@@ -492,10 +719,7 @@
         <p>Burada Kur'an'ın dil inceliği (<span class="term">i'câzı</span>) göze çarpar: Önceki âyette "gece" ve sonraki âyette "hasetçi" kelimeleri belirsiz yapıda kullanılmışken, bu âyette "üfleyenler" belirli yapıda kullanılmıştır. Çünkü her gece veya her kıskançlık kötü değildir; ancak büyü amacıyla düğümlere üfleyenlerin tamamı istisnasız kötüdür.</p>
         <h3 class="section-title">5. Âyet: Hasedin Şerri</h3>
         <p>Sûre, ahlaki hastalıkların en korkuncu olan <span class="term">haset</span> ile zirveye ulaşır. Haset; başkasına verilen nimetin o kimseden alınıp yok olmasını arzulamaktır. Gökyüzünde işlenen ilk günah <span class="key">İblis</span>'in <span class="key">Hz. Âdem</span>'e olan hasedi, yeryüzünde işlenen ilk günah ise <span class="key">Kabil</span>'in kardeşi <span class="key">Habil</span>'i öldürmesidir.</p>
-        <blockquote>
-          "Ateşin odunu yiyip bitirdiği gibi, haset de iyilikleri yer bitirir."
-          <span class="quote-attr">— Resûlullah (s.a.v.)</span>
-        </blockquote>
+        <blockquote>"Ateşin odunu yiyip bitirdiği gibi, haset de iyilikleri yer bitirir."<span class="quote-attr">— Resûlullah (s.a.v.)</span></blockquote>
       </div>
     </article>
 
@@ -526,10 +750,7 @@
         </ul>
         <h3 class="section-title">Hannâs: Geri Çekilen Vesveseci</h3>
         <p><span class="term">Hannâs</span>; insan Rabbini andığı zaman sinip geri çekilmeyi huy edinen demektir. O, ateşten yaratılmış görünmez ince bir varlıktır, hava ile karışarak insana özel yollardan girer.</p>
-        <blockquote>
-          Velîlerden birisi Yüce Allah'a dua edip şeytanın nasıl gelip vesvese verdiğini görmek ister. Bunun üzerine Allah ona insanı cam gibi şeffaf bir şekilde gösterir. İnsanın iki omuzu arasında kuş yuvası gibi siyah bir boşluk vardır. Domuz kılığında, fil hortumu gibi uzun hortumu olan sinsi şeytan gelir. Kul Allah'ı andığı an o hortum gerisin geriye çekilir. İşte "Hannâs" budur; <strong>zikrin nuru yanınca kaçandır!</strong>
-          <span class="quote-attr">— Tasavvuf Geleneğinden</span>
-        </blockquote>
+        <blockquote>Velîlerden birisi Yüce Allah'a dua edip şeytanın nasıl gelip vesvese verdiğini görmek ister. Bunun üzerine Allah ona insanı cam gibi şeffaf bir şekilde gösterir. İnsanın iki omuzu arasında kuş yuvası gibi siyah bir boşluk vardır. Domuz kılığında, fil hortumu gibi uzun hortumu olan sinsi şeytan gelir. Kul Allah'ı andığı an o hortum gerisin geriye çekilir. İşte "Hannâs" budur; <strong>zikrin nuru yanınca kaçandır!</strong><span class="quote-attr">— Tasavvuf Geleneğinden</span></blockquote>
         <h3 class="section-title">Felak ve Nâs Arasındaki Derin Sır</h3>
         <div class="highlight-box">
           <div class="highlight-box-title">İki Sûre Arasındaki Denge</div>
@@ -540,18 +761,9 @@
         <div id="nas-hatim"></div>
         <h3 class="section-title">Hatim Duaları</h3>
         <p><span class="key">İmam Buhârî</span>'den şöyle aktarılmıştır: <em>"Her hatimde kabul olan bir dua vardır. Kişi Kur'an'ı bitirdiğinde melek onun alnından öper."</em></p>
-        <blockquote>
-          "Allah'ım! Bu yüce Kur'an'la bana merhamet et. Onu benim için önder, nur, hidayet ve rahmet kıl. Allah'ım! Kur'an'dan unuttuklarımı bana hatırlat. Ondan bilmediklerimi bana öğret. Gece gündüz Kur'an okumakla beni rızıklandır. Ey Âlemlerin Rabbi! Kur'an'ı benim için kurtarıcı bir delil yap."
-          <span class="quote-attr">— Resûlullah'ın (s.a.v.) Hatim Duası</span>
-        </blockquote>
-        <blockquote>
-          "Allah'ım! Senden, sana saygı duyanların alçakgönüllülüğünü, inancı sağlam olanların yüceliğini, erdemli kişilerle beraber olmayı, her güzelliğin kazancını, her günahtan kurtuluşu, cennete ulaşmayı ve cehennemden kurtulmayı dilerim."
-          <span class="quote-attr">— Hz. Ali'nin (r.a.) Hatim Duası</span>
-        </blockquote>
-        <div class="surah-summary">
-          <h4>Kapanış</h4>
-          <p>Dualarımızın sonu, "Âlemlerin Rabbi olan Allah'a hamdolsun" demektir. Rabbim bizi bu düşmandan korusun, Kur'an'ın nurunu üzerimizden eksik etmesin. Âmîn.</p>
-        </div>
+        <blockquote>"Allah'ım! Bu yüce Kur'an'la bana merhamet et. Onu benim için önder, nur, hidayet ve rahmet kıl. Allah'ım! Kur'an'dan unuttuklarımı bana hatırlat. Ondan bilmediklerimi bana öğret. Gece gündüz Kur'an okumakla beni rızıklandır. Ey Âlemlerin Rabbi! Kur'an'ı benim için kurtarıcı bir delil yap."<span class="quote-attr">— Resûlullah'ın (s.a.v.) Hatim Duası</span></blockquote>
+        <blockquote>"Allah'ım! Senden, sana saygı duyanların alçakgönüllülüğünü, inancı sağlam olanların yüceliğini, erdemli kişilerle beraber olmayı, her güzelliğin kazancını, her günahtan kurtuluşu, cennete ulaşmayı ve cehennemden kurtulmayı dilerim."<span class="quote-attr">— Hz. Ali'nin (r.a.) Hatim Duası</span></blockquote>
+        <div class="surah-summary"><h4>Kapanış</h4><p>Dualarımızın sonu, "Âlemlerin Rabbi olan Allah'a hamdolsun" demektir. Rabbim bizi bu düşmandan korusun, Kur'an'ın nurunu üzerimizden eksik etmesin. Âmîn.</p></div>
       </div>
     </article>
 
@@ -562,59 +774,323 @@
     </footer>
 
   </main>
-</div>
+</div><!-- /shell -->
 
+<!-- Back to Top -->
 <button id="back-to-top" aria-label="Başa dön">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-    <polyline points="18 15 12 9 6 15"/>
-  </svg>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
 </button>
 
 <script>
-  const progressBar = document.getElementById('progress-bar');
-  window.addEventListener('scroll', () => {
-    const scrolled = window.scrollY;
-    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-    progressBar.style.width = (scrolled / maxScroll * 100) + '%';
-  }, { passive: true });
+// ══════════════════════════════════════════════════════════════
+//  SITE INTERACTIONS
+// ══════════════════════════════════════════════════════════════
 
-  const btt = document.getElementById('back-to-top');
-  window.addEventListener('scroll', () => { btt.classList.toggle('visible', window.scrollY > 400); }, { passive: true });
-  btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+// Progress bar
+const progressBar = document.getElementById('progress-bar');
+window.addEventListener('scroll', () => {
+  const s = window.scrollY, max = document.documentElement.scrollHeight - window.innerHeight;
+  progressBar.style.width = (s / max * 100) + '%';
+}, { passive: true });
 
-  const sidebar  = document.getElementById('sidebar');
-  const overlay  = document.getElementById('overlay');
-  const menuBtn  = document.getElementById('menu-btn');
-  function openSidebar()  { sidebar.classList.add('open'); overlay.classList.add('active'); document.body.style.overflow = 'hidden'; }
-  function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('active'); document.body.style.overflow = ''; }
-  menuBtn.addEventListener('click', () => sidebar.classList.contains('open') ? closeSidebar() : openSidebar());
-  overlay.addEventListener('click', closeSidebar);
-  sidebar.querySelectorAll('.toc-link').forEach(link => {
-    link.addEventListener('click', () => { if (window.innerWidth < 900) closeSidebar(); });
+// Back to top
+const btt = document.getElementById('back-to-top');
+window.addEventListener('scroll', () => { btt.classList.toggle('visible', window.scrollY > 400); }, { passive: true });
+btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+// Sidebar toggle
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('overlay');
+const menuBtn = document.getElementById('menu-btn');
+function openSidebar()  { sidebar.classList.add('open'); overlay.classList.add('active'); document.body.style.overflow = 'hidden'; }
+function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('active'); document.body.style.overflow = ''; }
+menuBtn.addEventListener('click', () => sidebar.classList.contains('open') ? closeSidebar() : openSidebar());
+overlay.addEventListener('click', closeSidebar);
+sidebar.querySelectorAll('.toc-link').forEach(link => {
+  link.addEventListener('click', () => { if (window.innerWidth < 900) closeSidebar(); });
+});
+
+// Scroll reveal
+const cards = document.querySelectorAll('.surah-card');
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); } });
+}, { threshold: 0.06 });
+cards.forEach(c => revealObs.observe(c));
+
+// Active TOC
+const tocObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      document.querySelectorAll('.toc-link').forEach(l => l.classList.remove('active'));
+      const a = document.querySelector(`.toc-link[href="#${e.target.id}"]`);
+      if (a) { a.classList.add('active'); a.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }
+    }
+  });
+}, { rootMargin: '-20% 0% -70% 0%' });
+document.querySelectorAll('[id]').forEach(s => tocObs.observe(s));
+
+
+// ══════════════════════════════════════════════════════════════
+//  CMS PANEL
+// ══════════════════════════════════════════════════════════════
+
+const STORAGE_KEY = 'tefsir_cms_v1';
+let currentEditId = null;
+
+// ── Storage ──────────────────────────────────────────────────
+function loadArticles() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+  catch { return []; }
+}
+function saveArticles(arr) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+}
+
+// ── Panel open/close ─────────────────────────────────────────
+function openEditor(articleId) {
+  currentEditId = articleId || null;
+  if (articleId) {
+    const art = loadArticles().find(a => a.id === articleId);
+    if (art) loadIntoEditor(art);
+  } else {
+    clearEditor();
+  }
+  showView('write');
+  document.getElementById('editor-panel').classList.add('open');
+  document.getElementById('editor-overlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeEditor() {
+  document.getElementById('editor-panel').classList.remove('open');
+  document.getElementById('editor-overlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+document.getElementById('editor-overlay').addEventListener('click', closeEditor);
+
+// ── Views ────────────────────────────────────────────────────
+function showView(name) {
+  document.querySelectorAll('.ep-view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.ep-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  document.querySelector(`.ep-tab[data-view="${name}"]`).classList.add('active');
+  if (name === 'preview') updatePreview();
+  if (name === 'manage') renderManageList();
+}
+
+// ── Editor helpers ───────────────────────────────────────────
+function clearEditor() {
+  document.getElementById('ep-title').value = '';
+  document.getElementById('ep-tag').value = '';
+  document.getElementById('ep-number').value = '';
+  document.getElementById('ep-pills').value = '';
+  document.getElementById('editor-content').innerHTML = '';
+  document.querySelector('.ep-btn-publish').textContent = 'Yayımla';
+}
+function loadIntoEditor(art) {
+  document.getElementById('ep-title').value = art.title || '';
+  document.getElementById('ep-tag').value = art.tag || '';
+  document.getElementById('ep-number').value = art.number || '';
+  document.getElementById('ep-pills').value = (art.pills || []).join(', ');
+  document.getElementById('editor-content').innerHTML = art.content || '';
+  document.querySelector('.ep-btn-publish').textContent = 'Güncelle';
+}
+
+// ── Toolbar: insert blocks ────────────────────────────────────
+const BLOCKS = {
+  p:          `<p>Metin buraya yazılır...</p>`,
+  h3:         `<h3 class="section-title">Bölüm Başlığı</h3>`,
+  blockquote: `<blockquote>Alıntı metni buraya...<span class="quote-attr">— Kaynak</span></blockquote>`,
+  highlight:  `<div class="highlight-box"><div class="highlight-box-title">Başlık</div><p>İçerik buraya yazılır...</p></div>`,
+  verse:      `<div class="verse-display"><span class="verse-arabic">عربي</span>Türkçe çeviri buraya...<span class="verse-ref">Sûre Adı, X. Âyet</span></div>`,
+  summary:    `<div class="surah-summary"><h4>Özet Başlığı</h4><p>Özet içeriği buraya yazılır...</p></div>`,
+  list:       `<ul class="numbered-list"><li>Birinci madde</li><li>İkinci madde</li><li>Üçüncü madde</li></ul>`,
+  divider:    `<div class="ornament-divider"><span>✦</span></div>`,
+};
+
+function insertBlock(type) {
+  const ed = document.getElementById('editor-content');
+  ed.focus();
+  document.execCommand('insertHTML', false, BLOCKS[type]);
+}
+
+// ── Toolbar: inline wraps ─────────────────────────────────────
+function wrapInline(cls) {
+  const sel = window.getSelection();
+  if (!sel || sel.isCollapsed) {
+    alert(`Önce metni seçin, sonra "${cls}" düğmesine tıklayın.`); return;
+  }
+  const range = sel.getRangeAt(0);
+  const span = document.createElement('span');
+  span.className = cls;
+  try {
+    range.surroundContents(span);
+  } catch {
+    const text = range.toString();
+    span.textContent = text;
+    range.deleteContents();
+    range.insertNode(span);
+  }
+  sel.removeAllRanges();
+}
+
+// ── Editor: keep Enter as <p> ─────────────────────────────────
+document.getElementById('editor-content').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    document.execCommand('insertParagraph', false);
+  }
+});
+
+// Paste as plain text
+document.getElementById('editor-content').addEventListener('paste', function(e) {
+  e.preventDefault();
+  const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+  document.execCommand('insertText', false, text);
+});
+
+// ── Preview ──────────────────────────────────────────────────
+function updatePreview() {
+  const title  = document.getElementById('ep-title').value || 'Başlık';
+  const tag    = document.getElementById('ep-tag').value || '';
+  const number = document.getElementById('ep-number').value || '';
+  const pillsR = document.getElementById('ep-pills').value || '';
+  const body   = document.getElementById('editor-content').innerHTML;
+
+  document.getElementById('preview-header').setAttribute('data-number', number);
+  document.getElementById('preview-tag').textContent = tag;
+  document.getElementById('preview-title').textContent = title;
+  document.getElementById('preview-body').innerHTML = body;
+  const pills = pillsR ? pillsR.split(',').map(p => p.trim()).filter(Boolean) : [];
+  document.getElementById('preview-pills').innerHTML = pills.map(p => `<span class="surah-pill">${p}</span>`).join('');
+}
+
+// ── Publish ──────────────────────────────────────────────────
+function publishArticle() {
+  const title  = document.getElementById('ep-title').value.trim();
+  const tag    = document.getElementById('ep-tag').value.trim();
+  const number = document.getElementById('ep-number').value.trim();
+  const pillsR = document.getElementById('ep-pills').value.trim();
+  const content = document.getElementById('editor-content').innerHTML.trim();
+
+  if (!title) { alert('Lütfen bir başlık girin.'); return; }
+  if (!content || content === '<br>') { alert('Lütfen içerik girin.'); return; }
+
+  const pills = pillsR ? pillsR.split(',').map(p => p.trim()).filter(Boolean) : [];
+  const articles = loadArticles();
+
+  if (currentEditId) {
+    const idx = articles.findIndex(a => a.id === currentEditId);
+    if (idx !== -1) {
+      articles[idx] = { ...articles[idx], title, tag, number, pills, content, updatedAt: Date.now() };
+    }
+  } else {
+    articles.push({ id: Date.now(), title, tag, number, pills, content, published: true, createdAt: Date.now() });
+  }
+
+  saveArticles(articles);
+  renderAllCMSArticles();
+  updateTOC();
+  closeEditor();
+}
+
+// ── Render CMS articles on page ──────────────────────────────
+function renderAllCMSArticles() {
+  // Remove old CMS cards
+  document.querySelectorAll('.surah-card[data-cms]').forEach(el => el.remove());
+
+  const articles = loadArticles().filter(a => a.published);
+  const footer = document.querySelector('.site-footer');
+
+  articles.forEach(art => {
+    const id = 'cms-' + art.id;
+    const pills = (art.pills || []).map(p => `<span class="surah-pill">${p}</span>`).join('');
+    const date = new Date(art.updatedAt || art.createdAt).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+
+    const html = `
+      <article class="surah-card" id="${id}" data-section="${id}" data-cms="${art.id}">
+        <header class="surah-header" data-number="${art.number || ''}">
+          <button class="cms-edit-btn" onclick="openEditor(${art.id})">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Düzenle
+          </button>
+          <div class="surah-tag">${art.tag || ''}${art.tag ? ' · ' : ''}${date}</div>
+          <h2 class="surah-title">${art.title}</h2>
+          <div class="surah-info">${pills}</div>
+        </header>
+        <div class="surah-body">${art.content}</div>
+      </article>`;
+
+    footer.insertAdjacentHTML('beforebegin', html);
   });
 
-  const cards = document.querySelectorAll('.surah-card');
-  const revealObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); } });
-  }, { threshold: 0.06 });
-  cards.forEach(c => revealObs.observe(c));
+  // Observe new cards
+  document.querySelectorAll('.surah-card[data-cms]').forEach(card => {
+    revealObs.observe(card);
+    tocObs.observe(card);
+  });
+}
 
-  const sections = document.querySelectorAll('[id]');
-  const tocLinks = document.querySelectorAll('.toc-link');
-  const tocObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        tocLinks.forEach(l => l.classList.remove('active'));
-        const active = document.querySelector(`.toc-link[href="#${e.target.id}"]`);
-        if (active) { active.classList.add('active'); active.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }
-      }
-    });
-  }, { rootMargin: '-20% 0% -70% 0%' });
-  sections.forEach(s => tocObs.observe(s));
+// ── Update sidebar TOC ────────────────────────────────────────
+function updateTOC() {
+  // Remove existing CMS TOC items
+  document.querySelectorAll('.toc-list li[data-cms-toc]').forEach(el => el.remove());
+  const tocList = document.getElementById('toc-list');
+  loadArticles().filter(a => a.published).forEach(art => {
+    const li = document.createElement('li');
+    li.setAttribute('data-cms-toc', art.id);
+    li.innerHTML = `<a href="#cms-${art.id}" class="toc-link">${art.title}</a>`;
+    tocList.appendChild(li);
+  });
+  // Re-observe
+  document.querySelectorAll('[id]').forEach(s => tocObs.observe(s));
+}
+
+// ── Manage list ───────────────────────────────────────────────
+function renderManageList() {
+  const articles = loadArticles();
+  const wrap = document.getElementById('manage-list');
+
+  if (!articles.length) {
+    wrap.innerHTML = `<div class="ep-manage-empty"><span>✦</span>Henüz yayımlanmış yazı yok.<br>Yaz sekmesinden yeni bir yazı oluşturun.</div>`;
+    return;
+  }
+
+  wrap.innerHTML = articles.map(art => {
+    const date = new Date(art.updatedAt || art.createdAt).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+    return `
+      <div class="ep-article-card">
+        <div class="ep-article-info">
+          <div class="ep-article-title">${art.title}</div>
+          <div class="ep-article-meta">
+            <span>${art.tag || '—'}</span>
+            <span>${date}</span>
+          </div>
+        </div>
+        <div class="ep-article-actions">
+          <button class="ep-act-btn" onclick="editArticle(${art.id})">Düzenle</button>
+          <button class="ep-act-btn delete" onclick="deleteArticle(${art.id})">Sil</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function editArticle(id) {
+  openEditor(id);
+  showView('write');
+}
+
+function deleteArticle(id) {
+  if (!confirm('Bu yazıyı silmek istediğinizden emin misiniz?')) return;
+  const articles = loadArticles().filter(a => a.id !== id);
+  saveArticles(articles);
+  renderAllCMSArticles();
+  updateTOC();
+  renderManageList();
+}
+
+// ── Init ──────────────────────────────────────────────────────
+renderAllCMSArticles();
+updateTOC();
 </script>
 </body>
-</html>
-    
-  </body>
-  
 </html>
