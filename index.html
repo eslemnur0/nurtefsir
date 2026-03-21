@@ -8,6 +8,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Cinzel:wght@400;500;600&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
 
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
 <style>
 /* ─── CSS Custom Properties ─── */
 :root {
@@ -141,16 +144,10 @@ blockquote::before { content: '\201C'; position: absolute; left: 1rem; top: .25r
 #back-to-top svg { width: 18px; height: 18px; }
 
 /* ─── CMS EDITOR PANEL ──────────────────────────────────── */
-
-/* Overlay */
 #editor-overlay { position: fixed; inset: 0; background: rgba(10,30,28,.45); z-index: 490; display: none; opacity: 0; transition: opacity .3s; backdrop-filter: blur(3px); }
 #editor-overlay.active { display: block; opacity: 1; }
-
-/* Panel */
 .editor-panel { position: fixed; top: 0; right: 0; width: 700px; max-width: 100vw; height: 100vh; background: var(--bg); box-shadow: -8px 0 40px rgba(0,0,0,.15); z-index: 500; display: flex; flex-direction: column; transform: translateX(100%); transition: transform .38s cubic-bezier(.4,0,.2,1); border-left: 1px solid var(--border-light); }
 .editor-panel.open { transform: translateX(0); }
-
-/* Panel Header */
 .ep-header { display: flex; align-items: center; justify-content: space-between; padding: 0 1.25rem; height: 56px; border-bottom: 1px solid var(--border-light); background: var(--accent); color: white; flex-shrink: 0; }
 .ep-header-left { display: flex; align-items: center; gap: 1rem; }
 .ep-logo { font-family: var(--font-display); font-size: .85rem; letter-spacing: .1em; opacity: .9; }
@@ -164,20 +161,13 @@ blockquote::before { content: '\201C'; position: absolute; left: 1rem; top: .25r
 .ep-btn-close { background: transparent; border: none; color: rgba(255,255,255,.8); cursor: pointer; width: 32px; height: 32px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; transition: var(--transition); }
 .ep-btn-close:hover { background: rgba(255,255,255,.15); color: white; }
 .ep-btn-close svg { width: 18px; height: 18px; }
-
-/* Panel Views */
 .ep-view { display: none; flex: 1; flex-direction: column; overflow: hidden; }
 .ep-view.active { display: flex; }
-
-/* ── Write View ── */
 .ep-meta { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border-light); background: var(--bg-alt); flex-shrink: 0; display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
 .ep-meta-full { grid-column: 1 / -1; }
 .ep-input { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: .5rem .75rem; font-family: var(--font-sans); font-size: .875rem; color: var(--text); outline: none; transition: var(--transition); }
 .ep-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(15,118,110,.1); }
-.ep-input::placeholder { color: var(--text-light); }
 .ep-input-label { font-family: var(--font-sans); font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text-light); margin-bottom: .3rem; display: block; }
-
-/* Toolbar */
 .ep-toolbar { display: flex; align-items: center; gap: 2px; padding: .5rem .75rem; border-bottom: 1px solid var(--border-light); background: var(--bg); flex-wrap: wrap; flex-shrink: 0; }
 .ep-tool-group { display: flex; align-items: center; gap: 2px; }
 .ep-tool-sep { width: 1px; height: 22px; background: var(--border); margin: 0 4px; flex-shrink: 0; }
@@ -189,21 +179,10 @@ blockquote::before { content: '\201C'; position: absolute; left: 1rem; top: .25r
 .ep-tool.tool-term { color: var(--text-muted); font-style: italic; }
 .ep-tool.tool-gold { color: var(--gold); }
 .ep-tool.tool-gold:hover { background: var(--gold-pale); border-color: var(--gold); color: var(--gold); }
-
-/* Editor Content Area */
 .ep-content-wrap { flex: 1; overflow-y: auto; padding: 1.5rem; }
 .ep-content-wrap::-webkit-scrollbar { width: 5px; }
 .ep-content-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-
-#editor-content {
-  min-height: 300px;
-  outline: none;
-  font-family: var(--font-serif);
-  font-size: 16px;
-  line-height: 1.8;
-  color: var(--text);
-}
-/* Style blocks inside the editor to look like the site */
+#editor-content { min-height: 300px; outline: none; font-family: var(--font-serif); font-size: 16px; line-height: 1.8; color: var(--text); }
 #editor-content p { margin-bottom: 1.2em; max-width: var(--max-prose); }
 #editor-content h3.section-title { font-family: var(--font-display); font-size: 1rem; letter-spacing: .05em; color: var(--accent-deep); font-weight: 500; margin: 2rem 0 .75rem; padding-bottom: .4rem; border-bottom: 1px solid var(--border-light); }
 #editor-content blockquote { border-left: 3px solid var(--quote-border); background: var(--bg-card); border-radius: 0 var(--radius) var(--radius) 0; padding: 1rem 1.25rem; margin: 1.25rem 0; font-style: italic; color: var(--text-muted); font-size: .95rem; line-height: 1.75; position: relative; }
@@ -221,11 +200,7 @@ blockquote::before { content: '\201C'; position: absolute; left: 1rem; top: .25r
 #editor-content .ornament-divider span { color: var(--accent); opacity: .4; }
 #editor-content .key { color: var(--accent); font-weight: 600; }
 #editor-content .term { font-style: italic; font-size: .92em; color: var(--text-muted); }
-
-/* Editor placeholder */
 #editor-content:empty::before { content: 'Yazmaya başlayın veya yukarıdaki araçlardan bir blok ekleyin...'; color: var(--text-light); font-style: italic; pointer-events: none; }
-
-/* ── Preview View ── */
 .ep-preview-wrap { flex: 1; overflow-y: auto; padding: 2rem 1.5rem; }
 .ep-preview-wrap::-webkit-scrollbar { width: 5px; }
 .ep-preview-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
@@ -234,8 +209,6 @@ blockquote::before { content: '\201C'; position: absolute; left: 1rem; top: .25r
 .ep-preview-header::after { content: attr(data-number); position: absolute; right: 1.5rem; top: 50%; transform: translateY(-50%); font-family: var(--font-display); font-size: 4rem; color: var(--accent); opacity: .06; font-weight: 700; pointer-events: none; }
 .ep-preview-body { padding: 2rem; }
 .ep-preview-body p { max-width: var(--max-prose); margin-bottom: 1.4em; line-height: 1.75; }
-
-/* ── Manage View ── */
 .ep-manage-wrap { flex: 1; overflow-y: auto; padding: 1.25rem; }
 .ep-manage-wrap::-webkit-scrollbar { width: 5px; }
 .ep-manage-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
@@ -250,8 +223,6 @@ blockquote::before { content: '\201C'; position: absolute; left: 1rem; top: .25r
 .ep-act-btn { background: none; border: 1px solid var(--border); border-radius: var(--radius); padding: .3rem .65rem; font-family: var(--font-sans); font-size: .75rem; cursor: pointer; transition: var(--transition); color: var(--text-muted); }
 .ep-act-btn:hover { background: var(--accent-pale); border-color: var(--accent); color: var(--accent); }
 .ep-act-btn.delete:hover { background: #fff0f0; border-color: #e53e3e; color: #e53e3e; }
-
-/* CMS article badge */
 .surah-card[data-cms] .surah-header { position: relative; }
 .cms-edit-btn { position: absolute; top: 1rem; right: 1rem; z-index: 10; background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: .3rem .7rem; font-family: var(--font-sans); font-size: .72rem; font-weight: 600; color: var(--accent); cursor: pointer; opacity: 0; transition: var(--transition); display: flex; align-items: center; gap: .3rem; }
 .surah-card[data-cms]:hover .cms-edit-btn { opacity: 1; }
@@ -282,7 +253,6 @@ blockquote::before { content: '\201C'; position: absolute; left: 1rem; top: .25r
   .surah-card { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; }
 }
 
-/* ─── Animations ─── */
 @keyframes fadeInUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
 .hero-ornament { animation: fadeInUp .6s ease both; }
 .hero-subtitle  { animation: fadeInUp .6s .1s ease both; }
@@ -295,7 +265,6 @@ blockquote::before { content: '\201C'; position: absolute; left: 1rem; top: .25r
 
 <div id="progress-bar"></div>
 
-<!-- ── Top Navigation ── -->
 <nav class="top-nav">
   <a href="#" class="nav-brand">SON SÛRELER TEFSİRİ</a>
   <div class="nav-right">
@@ -310,17 +279,11 @@ blockquote::before { content: '\201C'; position: absolute; left: 1rem; top: .25r
   </div>
 </nav>
 
-<!-- Sidebar Overlay -->
 <div class="sidebar-overlay" id="overlay"></div>
 
-<!-- ══════════════════════════════════════════════
-     CMS EDITOR PANEL
-════════════════════════════════════════════════ -->
 <div id="editor-overlay"></div>
 
 <div class="editor-panel" id="editor-panel">
-
-  <!-- Header -->
   <div class="ep-header">
     <div class="ep-header-left">
       <span class="ep-logo">YAZI PANELİ</span>
@@ -338,10 +301,7 @@ blockquote::before { content: '\201C'; position: absolute; left: 1rem; top: .25r
     </div>
   </div>
 
-  <!-- ── WRITE VIEW ── -->
   <div class="ep-view active" id="view-write">
-
-    <!-- Meta Fields -->
     <div class="ep-meta">
       <div class="ep-meta-full">
         <label class="ep-input-label">Başlık</label>
@@ -361,9 +321,7 @@ blockquote::before { content: '\201C'; position: absolute; left: 1rem; top: .25r
       </div>
     </div>
 
-    <!-- Toolbar -->
     <div class="ep-toolbar">
-      <!-- Block elements -->
       <div class="ep-tool-group">
         <button class="ep-tool" onclick="insertBlock('p')" title="Normal paragraf ekle">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="18" y2="18"/></svg> Paragraf
@@ -373,7 +331,6 @@ blockquote::before { content: '\201C'; position: absolute; left: 1rem; top: .25r
         </button>
       </div>
       <div class="ep-tool-sep"></div>
-      <!-- Quote & Highlight -->
       <div class="ep-tool-group">
         <button class="ep-tool" onclick="insertBlock('blockquote')" title="Alıntı kutusu ekle">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"/></svg> Alıntı
@@ -386,7 +343,6 @@ blockquote::before { content: '\201C'; position: absolute; left: 1rem; top: .25r
         </button>
       </div>
       <div class="ep-tool-sep"></div>
-      <!-- Lists & Summary -->
       <div class="ep-tool-group">
         <button class="ep-tool" onclick="insertBlock('list')" title="Numaralı liste ekle">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="9" y1="6" x2="20" y2="6"/><line x1="9" y1="12" x2="20" y2="12"/><line x1="9" y1="18" x2="20" y2="18"/><circle cx="4" cy="6" r="1.5" fill="currentColor"/><circle cx="4" cy="12" r="1.5" fill="currentColor"/><circle cx="4" cy="18" r="1.5" fill="currentColor"/></svg> Liste
@@ -399,7 +355,6 @@ blockquote::before { content: '\201C'; position: absolute; left: 1rem; top: .25r
         </button>
       </div>
       <div class="ep-tool-sep"></div>
-      <!-- Inline formats -->
       <div class="ep-tool-group">
         <button class="ep-tool tool-key" onclick="wrapInline('key')" title="Seçili metni anahtar kelime yap (yeşil-kalın)">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="7.5" cy="15.5" r="5.5"/><path d="M21 2l-9.6 9.6M15.5 7.5l3 3"/></svg> Anahtar
@@ -409,25 +364,17 @@ blockquote::before { content: '\201C'; position: absolute; left: 1rem; top: .25r
         </button>
       </div>
       <div class="ep-tool-sep"></div>
-      <!-- Basic formatting -->
       <div class="ep-tool-group">
-        <button class="ep-tool" onclick="document.execCommand('bold')" title="Kalın">
-          <strong>K</strong>
-        </button>
-        <button class="ep-tool" onclick="document.execCommand('italic')" title="İtalik">
-          <em>İ</em>
-        </button>
+        <button class="ep-tool" onclick="document.execCommand('bold')" title="Kalın"><strong>K</strong></button>
+        <button class="ep-tool" onclick="document.execCommand('italic')" title="İtalik"><em>İ</em></button>
       </div>
     </div>
 
-    <!-- Editor Content -->
     <div class="ep-content-wrap">
       <div id="editor-content" contenteditable="true" spellcheck="true"></div>
     </div>
+  </div>
 
-  </div><!-- /view-write -->
-
-  <!-- ── PREVIEW VIEW ── -->
   <div class="ep-view" id="view-preview">
     <div class="ep-preview-wrap">
       <div class="ep-preview-card">
@@ -441,47 +388,19 @@ blockquote::before { content: '\201C'; position: absolute; left: 1rem; top: .25r
     </div>
   </div>
 
-  <!-- ── MANAGE VIEW ── -->
   <div class="ep-view" id="view-manage">
     <div class="ep-manage-wrap" id="manage-list"></div>
   </div>
-
-</div><!-- /editor-panel -->
-
+</div>
 
 <div class="shell">
-
-  <!-- Sidebar / TOC -->
   <aside class="sidebar" id="sidebar" aria-label="İçindekiler">
     <p class="sidebar-title">İçindekiler</p>
     <ul class="toc-list" id="toc-list">
-      <li><a href="#kafirun" class="toc-link">Kâfirûn Sûresi</a></li>
-      <li><a href="#kafirun-nuzul" class="toc-link toc-sub">· İniş Sebebi</a></li>
-      <li><a href="#kafirun-tefsir" class="toc-link toc-sub">· Âyetlerin Tefsiri</a></li>
-      <li><a href="#kafirun-ahlak" class="toc-link toc-sub">· Ahlakî Ders</a></li>
-      <li><a href="#nasr" class="toc-link">Nasr Sûresi</a></li>
-      <li><a href="#nasr-a1" class="toc-link toc-sub">· 1. Âyet: Yardım ve Fetih</a></li>
-      <li><a href="#nasr-a2" class="toc-link toc-sub">· 2. Âyet: Bölük Bölük Girme</a></li>
-      <li><a href="#nasr-a3" class="toc-link toc-sub">· 3. Âyet: Tesbih ve İstiğfar</a></li>
-      <li><a href="#tebbet" class="toc-link">Tebbet (Mesed) Sûresi</a></li>
-      <li><a href="#tebbet-nuzul" class="toc-link toc-sub">· İniş Sebebi</a></li>
-      <li><a href="#tebbet-ayetler" class="toc-link toc-sub">· Âyetlerin Tefsiri</a></li>
-      <li><a href="#ihlas" class="toc-link">İhlâs Sûresi</a></li>
-      <li><a href="#ihlas-isimler" class="toc-link toc-sub">· Sûrenin İsimleri</a></li>
-      <li><a href="#ihlas-ayetler" class="toc-link toc-sub">· Âyetlerin Tefsiri</a></li>
-      <li><a href="#felak" class="toc-link">Felak Sûresi</a></li>
-      <li><a href="#felak-nuzul" class="toc-link toc-sub">· Sihir Hâdisesi</a></li>
-      <li><a href="#felak-ayetler" class="toc-link toc-sub">· Âyetlerin Tefsiri</a></li>
-      <li><a href="#nas" class="toc-link">Nâs Sûresi</a></li>
-      <li><a href="#nas-vesvese" class="toc-link toc-sub">· Vesvese ve Şeytan</a></li>
-      <li><a href="#nas-hatim" class="toc-link toc-sub">· Hatim Duaları</a></li>
-    </ul>
+      </ul>
   </aside>
 
-  <!-- Main Content -->
   <main class="main" id="main">
-
-    <!-- Hero -->
     <section class="hero">
       <div class="hero-ornament">
         <div class="hero-ornament-line"></div>
@@ -493,11 +412,7 @@ blockquote::before { content: '\201C'; position: absolute; left: 1rem; top: .25r
       </div>
       <p class="hero-subtitle">İlmî Tefsir Çalışması</p>
       <h1 class="hero-title">Son Sûreler Tefsiri</h1>
-      <p class="hero-desc">
-        Kâfirûn'dan Nâs'a — tevhidin beyannamesi, şirkten beraat,
-        ilâhî adaletin tecellisi ve insanın ebedî sığınağı üzerine
-        kapsamlı bir tefsir okuması.
-      </p>
+      <p class="hero-desc">Kâfirûn'dan Nâs'a — tevhidin beyannamesi, şirkten beraat, ilâhî adaletin tecellisi ve insanın ebedî sığınağı üzerine kapsamlı bir tefsir okuması.</p>
       <div class="hero-meta">
         <span class="hero-badge"><strong>6</strong> Sûre</span>
         <span class="hero-badge"><strong>Mekke &amp; Medine</strong> Dönemi</span>
@@ -508,316 +423,272 @@ blockquote::before { content: '\201C'; position: absolute; left: 1rem; top: .25r
       </div>
     </section>
 
-    <!-- ══════════ KAFIRUN SÛRESİ ══════════ -->
-    <article class="surah-card" id="kafirun" data-section="kafirun">
-      <header class="surah-header" data-number="109">
-        <div class="surah-tag">Mekke Dönemi · 6 Âyet</div>
-        <h2 class="surah-title">Kâfirûn Sûresi</h2>
-        <div class="surah-info">
-          <span class="surah-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>109. Sûre</span>
-          <span class="surah-pill">Tevhidin Beyannamesi</span>
-          <span class="surah-pill">Kur'an'ın ¼'ü Gibi</span>
-        </div>
-      </header>
-      <div class="surah-body">
-        <p><span class="key">Kâfirûn sûresi</span> altı âyetten oluşur. En yaygın görüşe göre <span class="key">Mekke'de</span> inmiştir; İbn Mes'ûd (radıyallahü anh) ve âlimlerin büyük çoğunluğu bu kanaattedir. Bazı rivayetlerde ise Medine'de indiği de geçer; İbn Abbâs'tan bir görüş bu yöndedir. Yine de esas kabul edilen, sûrenin <span class="term">Mekkî</span> olduğudur.</p>
-        <p>Bu sûreye sadece Kâfirûn sûresi denmez. Ona <span class="term">İhlâs</span>, <span class="term">İbadet</span>, <span class="term">Münâbeze</span>, <span class="term">Mükeşkişe</span> veya <span class="term">Mukaşkışa</span> gibi adlar da verilmiştir. Bu isimlerin ortak manası şudur: Bu sûre, kulun inancını temizler, şirkle arasına çizgi çeker, kalbi karışıklıktan kurtarır.</p>
-        <blockquote>Bu sûre, "ben Allah'a kullukta ortak kabul etmem" diyen bir kesinlik sûresidir. Bazı âlimler Kâfirûn ile İhlâs sûrelerine birlikte <strong>"iki arındırıcı sûre"</strong> demiştir. Biri "Allah birdir" der, öteki "öyleyse O'na başkası karıştırılamaz" der.<span class="quote-attr">— Tefsir Geleneği</span></blockquote>
-        <div class="highlight-box">
-          <div class="highlight-box-title">Fazileti</div>
-          <p>En meşhur rivayet şudur: <em>"Kim Kâfirûn sûresini okursa, sanki Kur'an'ın dörtte birini okumuş gibi olur."</em> Âlimler bunu şöyle açıklamıştır: Kur'an'ın büyük bir kısmı insanın neye inanacağı, neyi reddedeceği, nasıl yaşayacağı ve sonunda neyle karşılaşacağı üzerinedir. Kâfirûn sûresi bunların içinde özellikle inancın temizlenmesi ve şirkin reddi kısmını çok güçlü biçimde topladığı için "dörtte bir" gibi anılmıştır.</p>
-        </div>
-        <p><span class="key">Resûlullah</span> (sallallahü aleyhi ve sellem) sabah namazının farzından önceki iki rekâtta ve akşam namazının farzından sonraki iki rekâtta sık sık Kâfirûn ve İhlâs sûrelerini okuduğu bildirilmiştir. <span class="key">İbn Ömer</span> (radıyallahü anh), onu yirmi beş ay boyunca bu şekilde gözlediğini söylemiştir.</p>
-        <div id="kafirun-nuzul"></div>
-        <h3 class="section-title">İniş Sebebi</h3>
-        <p>Sûrenin iniş sebebiyle ilgili rivayetlerin hepsi aynı ana olayı anlatır. <span class="key">Kureyş</span>'in ileri gelenlerinden bir grup, aralarında <span class="key">Velîd b. Muğîre</span> ve <span class="key">Ebû Cehil</span>'in de bulunduğu söylenen bu topluluk, Resûlullah'a açıkça şunu teklif etti:</p>
-        <blockquote>"Gel bir uzlaşma bulalım. Bir süre sen bizim ilahlarımıza kulluk et, bir süre biz senin Rabbine kulluk edelim. Senin yolun daha iyiyse biz ondan pay almış oluruz; bizim yolumuz daha iyiyse sen pay almış olursun."<span class="quote-attr">— Müşriklerin Teklifi (Rivayetlerden)</span></blockquote>
-        <p>Resûlullah bu teklifi kabul etmedi. "Rabbimden gelecek hükmü beklerim" buyurdu. Bunun üzerine bu sûre indi. Ardından Resûlullah <span class="key">Mescid-i Haram</span>'a gidip Kureyş'in ileri gelenlerinin ortasında ayağa kalktı ve bu sûreyi onların yüzüne karşı okudu.</p>
-        <div id="kafirun-tefsir"></div>
-        <h3 class="section-title">"De ki" Emrinin Hikmeti</h3>
-        <p><em>"De ki"</em> emrinin başta gelmesi çok önemlidir. Bu söz <span class="key">Peygamber</span>'in öfkesiyle söylediği bir söz değil, <span class="key">Allah</span>'ın emridir. Resûlullah normalde insanlara yumuşaklıkla, hikmetle, güzel öğütle davranmakla emrolunmuştu. "De ki" ifadesi bunu açıklar: Bu sertlik kişisel değildir, <span class="term">ilâhî hükmün ilanıdır</span>.</p>
-        <div class="ornament-divider"><span>✦</span></div>
-        <h3 class="section-title">Tekrarlı Âyetlerin Hikmeti</h3>
-        <p><em>"Ben sizin taptıklarınıza tapmam. Siz de benim taptığıma tapacak değilsiniz. Ben de sizin taptıklarınıza tapacak değilim. Siz de benim taptığıma tapacak değilsiniz."</em> Bu dört cümle ilk bakışta tekrar gibi görünür. Ama âlimler burada boş bir tekrar olmadığını söylemiştir.</p>
-        <p>Bir açıklamaya göre ilk iki cümle geleceğe bakar; son iki cümle ise şimdiye ve geçmişe. Mananın özü değişmez: Hem bugün, hem yarın, hem geçmişte, hem gelecekte bu iki yol birleşmez.</p>
-        <div id="kafirun-ahlak"></div>
-        <h3 class="section-title">"Sizin Dininiz Size, Benim Dinim Bana"</h3>
-        <p>Bu son âyet sûrenin en meşhur ve en yanlış anlaşılabilecek yeridir. Bunun manası asla "siz küfrünüzde serbestsiniz, ben razıyım" değildir. <span class="key">İbn Abbâs</span> bunu açıkça, <em>"Sizin inkârınız size, benim tevhidim bana"</em> diye açıklamıştır.</p>
-        <p>Burada <span class="term">tehdit</span>, <span class="term">ilişik kesme</span>, <span class="term">ayrım</span>, <span class="term">hesap</span> ve <span class="term">ceza-karşılık</span> manası birlikte vardır. Hepsinin özü birdir: <span class="key">Hak ile bâtıl birbirine karışmayacaktır.</span></p>
-        <h3 class="section-title">Tasavvufî Boyut</h3>
-        <p><span class="term">Tasavvuf</span> ehli bu sûreyi iç âlem açısından da okumuştur. Onlara göre dışarıdaki putlar kadar, içerdeki putlar da vardır. İnsan bazen taş puta secde etmez ama kalbini mala, makama, şöhrete, halkın övgüsüne, korkuya, <span class="term">hevâya</span>, nefse verir. Kâfirûn sûresi işte bu gizli ortaklara da "hayır" der.</p>
-        <div class="surah-summary"><h4>Sûrenin Özü</h4><p>Hem bir iman beyannamesi, hem bir şirkten uzak durma metni, hem bir gece duası, hem namaz sûresi, hem ahlak dersi, hem tasavvufî arınma metni, hem de akideyi koruyan bir kaledir. Yumuşak olmak başka şeydir, hak ile bâtılı karıştırmak başka şeydir.</p></div>
-      </div>
-    </article>
-
-    <!-- ══════════ NASR SÛRESİ ══════════ -->
-    <article class="surah-card" id="nasr" data-section="nasr">
-      <header class="surah-header" data-number="110">
-        <div class="surah-tag">Medine Dönemi · 3 Âyet · Son İnen Sûre</div>
-        <h2 class="surah-title">Nasr Sûresi</h2>
-        <div class="surah-info">
-          <span class="surah-pill">110. Sûre</span>
-          <span class="surah-pill">Veda Sûresi</span>
-          <span class="surah-pill">Ecel Habercisi</span>
-        </div>
-      </header>
-      <div class="surah-body">
-        <p>Medine döneminde nazil olan ve üç âyetten oluşan <span class="key">Nasr Sûresi</span>, Kur'an-ı Kerîm'de bir bütün olarak en son inen sûredir. <span class="key">İbn Abbâs</span> ve diğer büyük sahabelerin bildirdiğine göre bu sûre, <span class="key">Peygamber Efendimiz</span>'e (sallallahü aleyhi ve sellem) bu dünyadan göçme vaktinin yaklaştığını haber veren ilâhî bir şifredir. Bu yüzdendir ki bu sûreye <span class="term">Tevdi</span> — yani <em>"Veda Sûresi"</em> — de denilmiştir.</p>
-        <blockquote>Bu sûre indiğinde ashab-ı kiram fetih ve zafer müjdesiyle sevinirken, amcası <strong>Hz. Abbas</strong> ağlamaya başlamıştır. Efendimiz "Niçin ağlıyorsun amca?" diye sorduğunda, "Kendi ölüm haberini kendin verdin" demiş, Efendimiz de "Tam senin dediğin gibi" diyerek onu doğrulamıştır.<span class="quote-attr">— Hz. Abbas (r.a.) rivayeti</span></blockquote>
-        <p><span class="key">Hz. Ömer</span>'in, yaşı küçük olmasına rağmen <span class="key">İbn Abbâs</span>'ı Bedir gazilerine denk tutup meclisine almasının sırrı da bu sûredir. Sahabeler bu duruma itiraz edince Hz. Ömer onları toplayıp Nasr sûresinin manasını sormuş, <span class="key">İbn Abbâs</span>, <em>"Bu, Resûlullah'ın ecelidir, Allah ona vefatının yaklaştığını bildiriyor"</em> diyerek sûrenin <span class="term">bâtınî</span> manasını çözmüştür.</p>
-        <div id="nasr-a1"></div>
-        <h3 class="section-title">Birinci Âyet: İlâhî Yardım ve Fethin Gelişi</h3>
-        <div class="verse-display"><span class="verse-arabic">إِذَا جَاءَ نَصْرُ اللَّهِ وَالْفَتْحُ</span>"Allah'ın yardımı ve fetih geldiği zaman…"<span class="verse-ref">Nasr Sûresi, 1. Âyet</span></div>
-        <p><span class="key">Nasr</span> ve <span class="key">Fetih</span> arasındaki fark şudur: Nasr, bir amaca ulaşmak için verilen ilâhî destektir; Fetih ise o yardımın sonucunda kapalı olan kapıların açılmasıdır. Nasr <span class="term">sebeptir</span>, Fetih ise <span class="term">sonuçtur</span>. Âlimlerin çoğunluğuna göre buradaki Fetih, <em>"Fetihlerin Fethi"</em> olan <span class="key">Mekke'nin fethidir</span>.</p>
-        <p>Hicretin 8. yılı Ramazan ayında 10.000 kişilik bir orduyla Mekke'ye girilirken Efendimiz o kadar <span class="term">mütevazıydı</span> ki, devesinin üzerinde Allah'a şükründen dolayı başı adeta eğere değiyordu. Mekke'ye girildiğinde Efendimiz kan dökmemiş, <span class="key">Kureyş</span>lilere:</p>
-        <blockquote>"Benden ne bekliyorsunuz?" diye sormuştur. Onlar "Sen kerem sahibi bir kardeşsin" deyince, "Gidin, hepiniz serbestsiniz" buyurarak eşsiz bir ahlak sergilemiştir.<span class="quote-attr">— Mekke Fethi Rivayeti (Tülekâ)</span></blockquote>
-        <div id="nasr-a2"></div>
-        <h3 class="section-title">İkinci Âyet: İnsanların Bölük Bölük İslam'a Girmesi</h3>
-        <p>Mekke fethedilince Arap kabileleri aralarında şöyle konuştular: <em>"Muhammed, Allah'ın Fil Ordusundan koruduğu o kutsal Harem halkına bile galip geldiyse, o kesinlikle hak peygamberdir."</em> Bu mantıkla, eskiden birer ikişer Müslüman olan insanlar, artık kabileler hâlinde, <span class="term">fevc fevc</span> (dalga dalga) İslam'a girmeye başladılar.</p>
-        <div class="highlight-box">
-          <div class="highlight-box-title">Kelâm Meselesi: Mukallidin İmanı</div>
-          <p>Bu âyet, İslam kelâmındaki önemli bir tartışmaya ışık tutar: Allah'ın varlığını derin felsefi delillerle bilmeyen, sadece sade bir şekilde iman eden sıradan insanların imanı kabul müdür?</p>
-          <p>Âlimlerin çoğunluğu bu âyete dayanarak "Evet, geçerlidir ve sahihtir" demiştir. Çünkü Allah, felsefi delilleri bilmeyen bu kalabalıkların imanını övmüş ve bunu Peygamberine en büyük nimet olarak sunmuştur.</p>
-        </div>
-        <div id="nasr-a3"></div>
-        <h3 class="section-title">Üçüncü Âyet: Tesbih, Hamd ve İstiğfar</h3>
-        <p>Yüce Allah burada sırasıyla üç görev veriyor: <span class="term">Tesbih</span> (Allah'ı kusurlardan arındırmak), <span class="term">Tahmid</span> (O'na şükretmek) ve <span class="term">İstiğfar</span> (bağışlanma dilemek). Bu sıra, Yaratıcıdan yaratılana doğru inen mânevî bir yolculuğu temsil eder.</p>
-        <p>Akla şu soru gelebilir: Günahsız (<span class="term">masum</span>) olan bir Peygamber neden istiğfar etsin? Bunun pek çok sırrı vardır:</p>
-        <ul class="numbered-list">
-          <li>Ümmeti için istiğfar etmesidir; insanlar çoğaldıkça ümmetin günahı da artacaktır.</li>
-          <li>Bize örnek ve model olmasıdır; o bile istiğfar ediyorsa, günahkâr bizlerin ne yapması gerektiğini göstermektedir.</li>
-          <li>Mânevî yolculuk (<span class="term">seyr-u sülûk</span>) sonsuzdur; her üst makama yükseldiğinde bir önceki hali için istiğfar etmiştir.</li>
-          <li>İntikam almaktan vazgeçip affetmeye teşviktir; Allah ona "istiğfar et" deyince, o da Mekkelileri affetmiştir.</li>
-        </ul>
-        <div class="surah-summary"><h4>Sûrenin Mesajı</h4><p>Bu sûre, bir yandan İslam'ın en büyük zaferini kutlarken, diğer yandan her kemâlin bir sonu olduğunu ve en büyük zafer anlarında bile kibre kapılmadan başı eğerek Allah'a sığınmayı öğreten, Peygamberimizin ayrılık hüznüyle zafer coşkusunu aynı anda yaşatan ilâhî bir mucizedir.</p></div>
-      </div>
-    </article>
-
-    <!-- ══════════ TEBBET SÛRESİ ══════════ -->
-    <article class="surah-card" id="tebbet" data-section="tebbet">
-      <header class="surah-header" data-number="111">
-        <div class="surah-tag">Mekke Dönemi · 5 Âyet</div>
-        <h2 class="surah-title">Tebbet (Mesed) Sûresi</h2>
-        <div class="surah-info">
-          <span class="surah-pill">111. Sûre</span>
-          <span class="surah-pill">İlâhî Adaletin Tecellisi</span>
-          <span class="surah-pill">Gaybî Haber İçerir</span>
-        </div>
-      </header>
-      <div class="surah-body">
-        <p>Mekke'nin o zorlu günlerinde, hakikatin ışığı yeni yeni parlamaya başladığı bir dönemde inen bu mübarek sûre, beş âyetten oluşur. Kâinatın Efendisi şöyle buyurmuşlardır:</p>
-        <blockquote>"Kim Tebbet sûresini okursa, dilerim ki Allah, onunla Ebû Leheb'i aynı yurtta (cehennemde) bir araya getirmez."<span class="quote-attr">— Resûlullah (s.a.v.)</span></blockquote>
-        <div id="tebbet-nuzul"></div>
-        <h3 class="section-title">İniş Sebebi: Safa Tepesi Hâdisesi</h3>
-        <p>Yüce Allah, <em>"En yakın akrabalarını uyar"</em> emrini verdiğinde, <span class="key">Peygamber Efendimiz</span> <span class="key">Safa tepesine</span> çıkmış ve <em>"Ya Sabâhâh!"</em> diye seslenmişti. Kureyş toplandığında Efendimiz onları uyarınca, öz amcası olan <span class="key">Ebû Leheb</span> kibrine yenik düşerek eline bir taş aldı ve <em>"Tebben lek! Bizi bunun için mi buraya topladın!"</em> diyerek hakaret etti.</p>
-        <div id="tebbet-ayetler"></div>
-        <h3 class="section-title">1. Âyet: İki Elin Helâki</h3>
-        <div class="verse-display"><span class="verse-arabic">تَبَّتْ يَدَا أَبِي لَهَبٍ وَتَبَّ</span>"Ebû Leheb'in iki eli kurusun (helâk olsun), kurudu da (zaten helâk oldu)."<span class="verse-ref">Tebbet Sûresi, 1. Âyet</span></div>
-        <p>Ayette özellikle <em>"iki eli"</em> ifadesinin kullanılması çok derin manalar taşır. Arapçada bir insanın "elleri", onun bütün varlığını, gücünü ve bizzat kendisini temsil eder (<span class="term">mecaz-ı mürsel</span>). Yani <em>"onun bütün varlığı, dini, dünyası, öncesi ve sonrası helâk olsun"</em> demektir.</p>
-        <p>Peki, ismi <span class="term">Abdüluzza</span> iken, Kur'an onu neden <span class="key">Ebû Leheb</span> (Alevin Babası) künyesiyle andı? Bunun üç hikmeti vardır:</p>
-        <ul class="numbered-list">
-          <li>Allah, kendi kelamında şirki simgeleyen bir putun adını (Uzza) anmayı o isme layık görmemiştir.</li>
-          <li>Ebû Leheb'in yanakları ateş parçası gibi kırmızıydı, bu yüzden bu lakapla meşhur olmuştu.</li>
-          <li>Onun gideceği yer alev alev yanan cehennem ateşi olduğu için, "Alevin Babası" künyesi onun acı sonuyla mükemmel bir uyum içindeydi. Bu künye bir onurlandırma değil, ateşle olan ebedî akrabalığının tescilidir.</li>
-        </ul>
-        <div class="ornament-divider"><span>✦</span></div>
-        <h3 class="section-title">3. Âyet: Kur'an'ın İcazı ve Kader Meselesi</h3>
-        <p>Bu âyet, Kur'an'ın mucizelerinden birini barındırır. <span class="key">Allah</span>, <span class="key">Ebû Leheb</span> henüz sağken onun asla iman etmeyeceğini ve cehenneme gireceğini kesin bir dille haber vermiştir. <span class="term">Kelâm</span> âlimleri buna <span class="term">"teklif-i mâ lâ yutâk"</span> penceresinden bakmışlardır.</p>
-        <blockquote>Ebû Leheb Kur'an'a iman etmekle emrolunmuştu, ancak Kur'an onun iman etmeyeceğini söylüyordu. Bu zıtlık gibi görünen durum, aslında Allah'ın ezelî ilminin (<span class="term">kaderin</span>) kusursuzluğunu gösterir. Yüce Allah, o katılaşmış kalbin kendi özgür iradesiyle hiçbir zaman hakkı seçmeyeceğini biliyordu ve bunu peşinen ilan etti.<span class="quote-attr">— Kelâm Alimleri</span></blockquote>
-        <h3 class="section-title">4. Âyet: Odun Hamalı Kadın</h3>
-        <p><span class="key">Ebû Leheb</span>'in eşi, Mekke'nin soylularından <span class="key">Ebû Süfyan</span>'ın kız kardeşi <span class="key">Ümmü Cemil</span>'dir. Soylu ve zengin olmasına rağmen kalbi hasetle kararmış bu kadın, kocasının en büyük destekçisiydi. Ayette ona <span class="term">"odun hamalı"</span> (<span class="term">hammâletel hatab</span>) denmesi, hem gerçek hem mecaz anlamları olan çok katmanlı bir tasvirdir.</p>
-        <p><strong>Gerçek mana:</strong> Gece karanlığında dağlardan dikenli çalıları toplar ve Efendimizin geçeceği yollara, kapısının önüne sererdi. Fakat Allah'ın himayesindeki Peygamber, o dikenlerin üzerine sanki ipeğe basarmış gibi basardı.</p>
-        <p><strong>Mecaz mana:</strong> Arapçada <span class="term">"odun taşımak"</span>, laf taşımak, insanların arasını bozmak, fitne ateşi yakmak demektir (<span class="term">kovuculuk / nemîme</span>).</p>
-        <div class="highlight-box">
-          <div class="highlight-box-title">İslam'ın Temel Prensibi</div>
-          <p>Ebû Leheb ve karısı bu acı sonu yaşarken, onların kızı olan <strong>Durre (r.a.)</strong> iman edip Medine'ye hicret etmiştir. Peygamberimiz onun babasının suçuyla yargılanmasına sert tepki gösterip şöyle buyurmuştur: "Dirinin yüzüne ölüsü vurulmaz." Bu, İslam'ın kimseyi babasının suçuyla yargılamadığının ve suçun şahsiliğinin en güzel delilidir.</p>
-        </div>
-      </div>
-    </article>
-
-    <!-- ══════════ İHLÂS SÛRESİ ══════════ -->
-    <article class="surah-card" id="ihlas" data-section="ihlas">
-      <header class="surah-header" data-number="112">
-        <div class="surah-tag">Mekke / Medine · 4 Âyet</div>
-        <h2 class="surah-title">İhlâs Sûresi</h2>
-        <div class="surah-info">
-          <span class="surah-pill">112. Sûre</span>
-          <span class="surah-pill">Tevhidin Özeti</span>
-          <span class="surah-pill">Kur'an'ın ⅓'ü Gibi</span>
-        </div>
-      </header>
-      <div class="surah-body">
-        <p>Bu dört âyetlik kısa ama kâinatı içine alan sûre, <span class="term">tevhidin</span> — yani Allah'ı birliğinin — Delil ve Mucizelerindendir. Sûrenin gökyüzünden yeryüzüne inmesine üç farklı grubun soruları sebep olmuştur: <span class="key">Mekkeli müşrikler</span>, <span class="key">Yahudi âlimleri</span> ve <span class="key">Necran Hristiyanları</span>.</p>
-        <div id="ihlas-isimler"></div>
-        <h3 class="section-title">Sûrenin Yirmi İsmi</h3>
-        <p>Bir şeyin isimlerinin çokluğu, onun faziletinin büyüklüğünü gösterir. Âlimler bu sûrenin <strong>yirmi ayrı ismini</strong> saymışlardır:</p>
-        <ul class="numbered-list">
-          <li><span class="term">Tevhid</span> — Allah'ın bir ve tek olduğuna inanma</li>
-          <li><span class="term">İhlâs</span> — Samimiyet, gösterişten uzak, katıksız bağlılık</li>
-          <li><span class="term">Tefrid</span> — Allah'ı tek kılma, eşsiz kabul etme</li>
-          <li><span class="term">Necat</span> — Kurtuluş, dünyada şirkten ve ahirette cehennemden kurtarma</li>
-          <li><span class="term">Velâyet</span> — Allah'a dostluk; bunu okuyan Allah'ın dost edinilmiş kulu olur</li>
-          <li><span class="term">Cemal</span> — Güzellik; Peygamberimiz "Allah güzeldir, güzelliği sever" buyurunca bu sûrenin manasını saymıştır</li>
-          <li><span class="term">Mukaşkışa</span> — Şirk ve nifak hastalıklarından kurtaran (Kâfirûn da aynı ismi taşır)</li>
-          <li><span class="term">Nur</span> — Kur'an'ın gözbebeği ve nuru</li>
-        </ul>
-        <div id="ihlas-ayetler"></div>
-        <h3 class="section-title">1. Âyet: Ehad — Mutlak Birlik</h3>
-        <div class="verse-display"><span class="verse-arabic">قُلْ هُوَ اللَّهُ أَحَدٌ</span>"De ki: O Allah'tır, birdir."<span class="verse-ref">İhlâs Sûresi, 1. Âyet</span></div>
-        <p>Dilimizde "Bir" kelimesinin karşılığı olan <span class="term">Vahid</span> ile ayette geçen <span class="term">Ehad</span> arasında çok ince ama dağlar kadar büyük bir fark vardır. <span class="term">Vahid</span> sayılarla ilgilidir; bir derseniz, iki ve üç de var demektir. Ancak <span class="term">Ehad</span> kelimesi mutlaktır; başka bir varlığın olma ihtimalini kökünden siler.</p>
-        <blockquote>İrfan ehli bu "O, Allah, Birdir" sıralamasını manevî bir yolculuğun üç makamı olarak görürler. En yüce makam olan <span class="term">mukarrebler</span> için sadece "O" demek yeterlidir; ikinci sıradaki <span class="term">sağcılar</span> "O, Allah'tır" derler; üçüncü sıradaki <span class="term">solcular</span> ise birden fazla ilah olabileceğini düşündükleri için onlara "Sadece Birdir" kelimesi eklenmiştir.<span class="quote-attr">— Tasavvuf Geleneği</span></blockquote>
-        <h3 class="section-title">2. Âyet: Allah'üs-Samed</h3>
-        <div class="verse-display"><span class="verse-arabic">اللَّهُ الصَّمَدُ</span>"Allah Samed'dir."<span class="verse-ref">İhlâs Sûresi, 2. Âyet</span></div>
-        <p><span class="key">Samed</span> kelimesi üç büyük manayı barındırır: <strong>(1)</strong> Felaket ve musibet anlarında herkesin koşup yardım istediği yüce kapı — tüm kâinatın saniye saniye O'na muhtaç olduğu, ama O'nun hiç kimseye muhtaç olmadığı yegâne zenginlik. <strong>(2)</strong> İçi boş olmayan, yemeyen, içmeyen, som ve yekpare olan — Allah'ı yaratıklara benzeten her iftiraya karşı cevap. <strong>(3)</strong> Her şey yok olup gittikten sonra geriye sadece O'nun kalması.</p>
-        <h3 class="section-title">3. ve 4. Âyetler: Doğurmadı, Doğmadı</h3>
-        <div class="verse-display"><span class="verse-arabic">لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ</span>"Doğurmadı, doğurulmadı. Hiç kimse O'na denk olmadı."<span class="verse-ref">İhlâs Sûresi, 3-4. Âyet</span></div>
-        <p>Bu dört âyet, baştan sona çelikten bir mantık zinciri gibi birbirine bağlıdır:</p>
-        <ul class="numbered-list">
-          <li><strong>Birinci âyet</strong>, <span class="term">teslis</span> inancını ve her türlü ortaklık iddiasını yıkarak Allah'ın parçalanmazlığını ilan eder.</li>
-          <li><strong>İkinci âyet</strong>, ihtiyaç ve noksanlık ifade eden her şeyi silip <span class="term">çok tanrıcılığı</span> bitirir.</li>
-          <li><strong>Üçüncü âyet</strong>, sebep-sonuç ve soy zincirini yıkarak O'nun kimsenin babası veya çocuğu olmadığını beyan eder.</li>
-          <li><strong>Dördüncü âyet</strong>, putları Allah'a eş koşan gizli ve açık her türlü <span class="term">şirki</span> bitirir.</li>
-        </ul>
-        <div class="surah-summary"><h4>Sûrenin Gücü</h4><p>İnsan aklının aradığı o güvenilir ve kusursuz kapı da, kalbin aradığı sığınılacak sonsuz zenginlik de buradadır. Cennetin kapılarını aralayan bu sırlar, sadece okuyan dillerde değil, idrak eden kalplerde gerçek manasını bulur.</p></div>
-      </div>
-    </article>
-
-    <!-- ══════════ FELAK SÛRESİ ══════════ -->
-    <article class="surah-card" id="felak" data-section="felak">
-      <header class="surah-header" data-number="113">
-        <div class="surah-tag">Medine (veya Mekke) Dönemi · 5 Âyet</div>
-        <h2 class="surah-title">Felak Sûresi</h2>
-        <div class="surah-info">
-          <span class="surah-pill">113. Sûre</span>
-          <span class="surah-pill">El-Mukaşkışeteyn'in İlki</span>
-          <span class="surah-pill">Şifa ve Sığınma Kalesi</span>
-        </div>
-      </header>
-      <div class="surah-body">
-        <p>Felak sûresi ve ardındaki <span class="key">Nâs sûresi</span>, insanı <span class="term">nifak</span> hastalıklarından ve her türlü şerden kurtarıp şifaya kavuşturdukları için birlikte <span class="term">El-Mukaşkışeteyn</span> olarak anılır. Bu iki sûre, Kur'an-ı Kerîm'in son kalesi ve sığınma dualarının zirvesidir.</p>
-        <blockquote>Peygamber Efendimiz fırtınalı bir gecede <strong>Ukbe bin Âmir</strong>'e dönerek: "Ey Ukbe, bunlarla Allah'a sığın. Hiçbir insan bu ikisinden daha üstün bir şeyle Allah'a sığınmış değildir" buyurmuştur.<span class="quote-attr">— Ukbe b. Âmir (r.a.) rivayeti</span></blockquote>
-        <div id="felak-nuzul"></div>
-        <h3 class="section-title">İniş Sebebi: Sihir Hâdisesi</h3>
-        <p>Rivayetlere göre, Yahudilerin önde gelenlerinden <span class="key">Lebid</span> adlı büyücü, Efendimizin saç tellerini kullanarak bir yay kirişine on bir adet düğüm atmış, içlerine iğneler batırarak şiddetli bir büyü yapmıştır. Bu büyülü malzemeyi de kuyu dibindeki büyük bir kayanın altına saklamıştır.</p>
-        <p><span class="key">Hz. Ali</span>, <span class="key">Zübeyr</span> ve <span class="key">Ammâr b. Yâsir</span> (radıyallahü anhüm) o kuyuya gidip suyu çektiklerinde, suyun kına gibi kıpkırmızı olduğunu görmüşlerdir. İşte o an Allah, toplam on bir âyetten oluşan Felak ve Nâs sûrelerini indirmiştir.</p>
-        <div class="highlight-box">
-          <div class="highlight-box-title">Kelâm Tartışması: Peygambere Büyü Etkisi Yapar mı?</div>
-          <p><span class="term">Mutezile</span> mezhebinden bazıları bu olayı inkâr etmişlerdir. Ancak <span class="term">Ehl-i Sünnet</span> âlimleri meseleyi şöyle çözmüştür: Allah, Peygamberimizi vahyi iletme, akıl ve peygamberlik <span class="term">ismeti</span> açısından kesinlikle korumuştur. Büyünün ona etkisi sadece "beşerî" bir hastalıktır — nasıl ki savaşta hastalanmışsa. Bu durum, aslında onun peygamberliğini daha da yüceltmiştir; çünkü o, iyileşmek için tamamen Allah'ın vahyine sarılmıştır.</p>
-        </div>
-        <div id="felak-ayetler"></div>
-        <h3 class="section-title">1. Âyet: Sabahın Rabbine Sığınmak</h3>
-        <p><span class="term">Felak</span> kelimesi; yarmak, yarıp çıkarmak anlamlarına gelir. Bu kelimenin tefsirinde dehşet verici bir anlam zenginliği vardır:</p>
-        <ul class="numbered-list">
-          <li><strong>Sabah:</strong> Allah gecenin zifiri karanlığını yarıp aydınlık sabahı nasıl çıkarıyorsa, darda kalmış kulunun üzerindeki bela karanlıklarını da öyle yarıp atacak kudrettedir.</li>
-          <li><strong>Yaratılış:</strong> Her şey bir yarılma ile meydana gelir; tohum çatlar bitki çıkar, yokluk karanlığı yarılır varlık âlemi ortaya çıkar.</li>
-          <li><strong>Cehennemdeki Zindan:</strong> Kapağı açıldığında cehennemliklerin feryat ettiği korkunç bir vadinin adı. Allah bize o dehşetli azabın sahibinin engin rahmetine sığınmamızı emretmektedir.</li>
-        </ul>
-        <h3 class="section-title">3. Âyet: Gecenin Şerri</h3>
-        <p><span class="term">Ğâsık</span>, karanlık ve soğuk anlamına gelir; <span class="term">Vekab</span> ise bu karanlığın etrafı kaplaması. Bir güçlü tefsire göre ise "Ğâsık", <span class="key">Ay</span>'dır. Nitekim <span class="key">Tirmizî</span>'de geçen sahih hadiste Peygamberimiz dolunaya bakmış ve Hz. Âişe'ye <em>"Şunun şerrinden Allah'a sığın, işte ğâsık budur"</em> buyurmuştur.</p>
-        <h3 class="section-title">4. Âyet: Düğümlere Üfüren Büyücüler</h3>
-        <p>Bu âyet, büyücü kadınlara ve genel olarak iplere düğümler atıp üzerlerine tılsımlı sözler okuyarak üfleyen tüm sihirbazlara işaret eder. <span class="term">Büyü (sihir)</span>, insan psikolojisini alt üst eden, karı-kocanın arasını ayıran, iradeyi bağlayan ve dinen <span class="term">şirk</span> sayılan büyük bir günahtır.</p>
-        <p>Burada Kur'an'ın dil inceliği (<span class="term">i'câzı</span>) göze çarpar: Önceki âyette "gece" ve sonraki âyette "hasetçi" kelimeleri belirsiz yapıda kullanılmışken, bu âyette "üfleyenler" belirli yapıda kullanılmıştır. Çünkü her gece veya her kıskançlık kötü değildir; ancak büyü amacıyla düğümlere üfleyenlerin tamamı istisnasız kötüdür.</p>
-        <h3 class="section-title">5. Âyet: Hasedin Şerri</h3>
-        <p>Sûre, ahlaki hastalıkların en korkuncu olan <span class="term">haset</span> ile zirveye ulaşır. Haset; başkasına verilen nimetin o kimseden alınıp yok olmasını arzulamaktır. Gökyüzünde işlenen ilk günah <span class="key">İblis</span>'in <span class="key">Hz. Âdem</span>'e olan hasedi, yeryüzünde işlenen ilk günah ise <span class="key">Kabil</span>'in kardeşi <span class="key">Habil</span>'i öldürmesidir.</p>
-        <blockquote>"Ateşin odunu yiyip bitirdiği gibi, haset de iyilikleri yer bitirir."<span class="quote-attr">— Resûlullah (s.a.v.)</span></blockquote>
-      </div>
-    </article>
-
-    <!-- ══════════ NÂS SÛRESİ ══════════ -->
-    <article class="surah-card" id="nas" data-section="nas">
-      <header class="surah-header" data-number="114">
-        <div class="surah-tag">Mekke / Medine · 6 Âyet · Kur'an'ın Son Sûresi</div>
-        <h2 class="surah-title">Nâs Sûresi</h2>
-        <div class="surah-info">
-          <span class="surah-pill">114. Sûre</span>
-          <span class="surah-pill">El-Mukaşkışeteyn'in İkincisi</span>
-          <span class="surah-pill">Kur'an'ın Son Kalesi</span>
-        </div>
-      </header>
-      <div class="surah-body">
-        <p>Kur'an-ı Kerîm'in son sûresi olan <span class="key">Nâs Sûresi</span>, bizi hem bedenî hem ruhî hem de manevî tehlikelere karşı koruyan üçlü bir İlâhî zırh sunar. Sûrede Allah'ın üç yüce sıfatı peş peşe anılır: <span class="term">Rabb</span> (terbiye eden), <span class="term">Melik</span> (hükümdar) ve <span class="term">İlâh</span> (tapınılan).</p>
-        <p>Bu üç sıfatın peş peşe sıralanmasının hikmeti şudur: Kendisinden sığınılan düşman, insanlara kasteden şeytandır. <span class="key">Allah</span> burada, <em>"Benim kullarımın üzerinde senin bir etkin olamaz"</em> (Hicr Sûresi, 42) ayetiyle insanın kendi koruması altında olduğunu ilan edip şeytana gözdağı vermektedir.</p>
-        <div id="nas-vesvese"></div>
-        <h3 class="section-title">Vesvese ve Şeytanın Altı Tuzağı</h3>
-        <p><span class="term">Vesvâs</span>, hissedilen fakat kaçınılması zor olan gizli fısıltı demektir. Şeytan bu fısıltıyı durmadan tekrarladığı için, sanki bizzat vesvesenin ta kendisi olmuş ve ona bu isim verilmiştir. Şeytanın saldırısı rastgele değildir, adım adım gelir:</p>
-        <ul class="numbered-list">
-          <li><strong>İnkâr ve şirk:</strong> İlk hedefi budur. Başarırsa içi rahatlar.</li>
-          <li><strong>Bid'at:</strong> İlkini yapamazsa dinde sonradan uydurulan yollara çeker. İblis bunu günahtan daha çok sever; çünkü insan günahı bilince tövbe eder, bid'ati doğru sanıp tövbe etmez.</li>
-          <li><strong>Büyük günahlar:</strong> Bunda da başarısız olursa bütün çeşitleriyle büyük günahlara sürükler.</li>
-          <li><strong>Küçük günahlar:</strong> Üst üste yığılıp devasa bir ateş yakan küçücük odunlar gibidir.</li>
-          <li><strong>Boş işler:</strong> Sevabı da günahı da bulunmayan boş işlerle meşgul edip vakti çalar.</li>
-          <li><strong>Daha az sevaplı iş:</strong> Kişiyi daha büyük sevaplı bir işten alıkoyup, daha az sevaplı bir işle oyalar.</li>
-        </ul>
-        <h3 class="section-title">Hannâs: Geri Çekilen Vesveseci</h3>
-        <p><span class="term">Hannâs</span>; insan Rabbini andığı zaman sinip geri çekilmeyi huy edinen demektir. O, ateşten yaratılmış görünmez ince bir varlıktır, hava ile karışarak insana özel yollardan girer.</p>
-        <blockquote>Velîlerden birisi Yüce Allah'a dua edip şeytanın nasıl gelip vesvese verdiğini görmek ister. Bunun üzerine Allah ona insanı cam gibi şeffaf bir şekilde gösterir. İnsanın iki omuzu arasında kuş yuvası gibi siyah bir boşluk vardır. Domuz kılığında, fil hortumu gibi uzun hortumu olan sinsi şeytan gelir. Kul Allah'ı andığı an o hortum gerisin geriye çekilir. İşte "Hannâs" budur; <strong>zikrin nuru yanınca kaçandır!</strong><span class="quote-attr">— Tasavvuf Geleneğinden</span></blockquote>
-        <h3 class="section-title">Felak ve Nâs Arasındaki Derin Sır</h3>
-        <div class="highlight-box">
-          <div class="highlight-box-title">İki Sûre Arasındaki Denge</div>
-          <p><strong>Felak sûresinde</strong> Allah'ın sadece bir sıfatı (Sabahın Rabbi) anılır, buna karşılık üç büyük şerden (Gece, Büyücüler, Kıskançlar) sığınılır.</p>
-          <p><strong>Nâs sûresinde</strong> ise Allah'ın üç sıfatı (Rabb, Melik, İlâh) peş peşe anılır, ancak sadece bir tek şerden (Vesvese) sığınılır.</p>
-          <p>Bunun sırrı şudur: Felak'taki dertler bedene ve dünyaya ait kötülüklerdir. Nâs'taki dert ise dine ve imana aittir. Dinin zarar görmesi, bedenin yara almasından çok daha tehlikeli olduğu için, Allah'a yakarış da o oranda artmıştır.</p>
-        </div>
-        <div id="nas-hatim"></div>
-        <h3 class="section-title">Hatim Duaları</h3>
-        <p><span class="key">İmam Buhârî</span>'den şöyle aktarılmıştır: <em>"Her hatimde kabul olan bir dua vardır. Kişi Kur'an'ı bitirdiğinde melek onun alnından öper."</em></p>
-        <blockquote>"Allah'ım! Bu yüce Kur'an'la bana merhamet et. Onu benim için önder, nur, hidayet ve rahmet kıl. Allah'ım! Kur'an'dan unuttuklarımı bana hatırlat. Ondan bilmediklerimi bana öğret. Gece gündüz Kur'an okumakla beni rızıklandır. Ey Âlemlerin Rabbi! Kur'an'ı benim için kurtarıcı bir delil yap."<span class="quote-attr">— Resûlullah'ın (s.a.v.) Hatim Duası</span></blockquote>
-        <blockquote>"Allah'ım! Senden, sana saygı duyanların alçakgönüllülüğünü, inancı sağlam olanların yüceliğini, erdemli kişilerle beraber olmayı, her güzelliğin kazancını, her günahtan kurtuluşu, cennete ulaşmayı ve cehennemden kurtulmayı dilerim."<span class="quote-attr">— Hz. Ali'nin (r.a.) Hatim Duası</span></blockquote>
-        <div class="surah-summary"><h4>Kapanış</h4><p>Dualarımızın sonu, "Âlemlerin Rabbi olan Allah'a hamdolsun" demektir. Rabbim bizi bu düşmandan korusun, Kur'an'ın nurunu üzerimizden eksik etmesin. Âmîn.</p></div>
-      </div>
-    </article>
+    <div id="articles-container"></div>
 
     <footer class="site-footer">
       <span class="footer-ornament">✦</span>
       <p>Bu sayfa, Kâfirûn'dan Nâs'a son sûrelerin kapsamlı bir tefsirini sunmaktadır.</p>
       <p style="margin-top:.5rem">Dualarımızın sonu, <em>"Âlemlerin Rabbi olan Allah'a hamdolsun"</em> demektir.</p>
     </footer>
-
   </main>
-</div><!-- /shell -->
+</div>
 
-<!-- Back to Top -->
 <button id="back-to-top" aria-label="Başa dön">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
 </button>
 
 <script>
 // ══════════════════════════════════════════════════════════════
-//  SITE INTERACTIONS
+//  VERİTABANI (FIREBASE) AYARLARI
+// ══════════════════════════════════════════════════════════════
+// Sistemin herkes tarafından görünebilmesi için:
+// 1. firebase.google.com adresine gidip ücretsiz bir proje açın.
+// 2. Proje ayarlarından "Web App" (< / > ikonu) oluşturun.
+// 3. Orada size verilen "firebaseConfig" nesnesinin içini aşağıdaki kısma yapıştırın.
+// 4. USE_FIREBASE değerini "true" yapın.
+// 5. Firebase'den "Firestore Database" sekmesine girip Test Modunda veritabanı oluşturun.
 // ══════════════════════════════════════════════════════════════
 
-// Progress bar
-const progressBar = document.getElementById('progress-bar');
-window.addEventListener('scroll', () => {
-  const s = window.scrollY, max = document.documentElement.scrollHeight - window.innerHeight;
-  progressBar.style.width = (s / max * 100) + '%';
-}, { passive: true });
+const USE_FIREBASE = false; // Burayı true yaparsan Firebase devreye girer.
 
-// Back to top
-const btt = document.getElementById('back-to-top');
-window.addEventListener('scroll', () => { btt.classList.toggle('visible', window.scrollY > 400); }, { passive: true });
-btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+const firebaseConfig = {
+  apiKey: "API_KEY_BURAYA",
+  authDomain: "PROJE_ADI.firebaseapp.com",
+  projectId: "PROJE_ADI",
+  storageBucket: "PROJE_ADI.appspot.com",
+  messagingSenderId: "SENDER_ID",
+  appId: "APP_ID"
+};
 
-// Sidebar toggle
-const sidebar = document.getElementById('sidebar');
-const overlay = document.getElementById('overlay');
-const menuBtn = document.getElementById('menu-btn');
-function openSidebar()  { sidebar.classList.add('open'); overlay.classList.add('active'); document.body.style.overflow = 'hidden'; }
-function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('active'); document.body.style.overflow = ''; }
-menuBtn.addEventListener('click', () => sidebar.classList.contains('open') ? closeSidebar() : openSidebar());
-overlay.addEventListener('click', closeSidebar);
-sidebar.querySelectorAll('.toc-link').forEach(link => {
-  link.addEventListener('click', () => { if (window.innerWidth < 900) closeSidebar(); });
-});
+let db;
+if (USE_FIREBASE) {
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.firestore();
+}
 
-// Scroll reveal
-const cards = document.querySelectorAll('.surah-card');
+// ══════════════════════════════════════════════════════════════
+//  VARSAYILAN (ESKİ SABİT) YAZILAR
+// ══════════════════════════════════════════════════════════════
+// Bu veriler cihazın belleğine sadece ilk girişte yüklenecektir.
+
+const defaultArticles = [
+  {
+    id: 1, title: "Kâfirûn Sûresi", tag: "Mekke Dönemi · 6 Âyet", number: "109",
+    pills: ["109. Sûre", "Tevhidin Beyannamesi", "Kur'an'ın ¼'ü Gibi"],
+    subLinks: [{id:"kafirun-nuzul", title:"· İniş Sebebi"}, {id:"kafirun-tefsir", title:"· Âyetlerin Tefsiri"}, {id:"kafirun-ahlak", title:"· Ahlakî Ders"}],
+    content: `
+      <p><span class="key">Kâfirûn sûresi</span> altı âyetten oluşur. En yaygın görüşe göre <span class="key">Mekke'de</span> inmiştir; İbn Mes'ûd (radıyallahü anh) ve âlimlerin büyük çoğunluğu bu kanaattedir. Bazı rivayetlerde ise Medine'de indiği de geçer; İbn Abbâs'tan bir görüş bu yöndedir. Yine de esas kabul edilen, sûrenin <span class="term">Mekkî</span> olduğudur.</p>
+      <p>Bu sûreye sadece Kâfirûn sûresi denmez. Ona <span class="term">İhlâs</span>, <span class="term">İbadet</span>, <span class="term">Münâbeze</span>, <span class="term">Mükeşkişe</span> veya <span class="term">Mukaşkışa</span> gibi adlar da verilmiştir. Bu isimlerin ortak manası şudur: Bu sûre, kulun inancını temizler, şirkle arasına çizgi çeker, kalbi karışıklıktan kurtarır.</p>
+      <blockquote>Bu sûre, "ben Allah'a kullukta ortak kabul etmem" diyen bir kesinlik sûresidir. Bazı âlimler Kâfirûn ile İhlâs sûrelerine birlikte <strong>"iki arındırıcı sûre"</strong> demiştir. Biri "Allah birdir" der, öteki "öyleyse O'na başkası karıştırılamaz" der.<span class="quote-attr">— Tefsir Geleneği</span></blockquote>
+      <div class="highlight-box">
+        <div class="highlight-box-title">Fazileti</div>
+        <p>En meşhur rivayet şudur: <em>"Kim Kâfirûn sûresini okursa, sanki Kur'an'ın dörtte birini okumuş gibi olur."</em> Âlimler bunu şöyle açıklamıştır: Kur'an'ın büyük bir kısmı insanın neye inanacağı, neyi reddedeceği, nasıl yaşayacağı ve sonunda neyle karşılaşacağı üzerinedir. Kâfirûn sûresi bunların içinde özellikle inancın temizlenmesi ve şirkin reddi kısmını çok güçlü biçimde topladığı için "dörtte bir" gibi anılmıştır.</p>
+      </div>
+      <p><span class="key">Resûlullah</span> (sallallahü aleyhi ve sellem) sabah namazının farzından önceki iki rekâtta ve akşam namazının farzından sonraki iki rekâtta sık sık Kâfirûn ve İhlâs sûrelerini okuduğu bildirilmiştir. <span class="key">İbn Ömer</span> (radıyallahü anh), onu yirmi beş ay boyunca bu şekilde gözlediğini söylemiştir.</p>
+      <div id="kafirun-nuzul"></div>
+      <h3 class="section-title">İniş Sebebi</h3>
+      <p>Sûrenin iniş sebebiyle ilgili rivayetlerin hepsi aynı ana olayı anlatır. <span class="key">Kureyş</span>'in ileri gelenlerinden bir grup, aralarında <span class="key">Velîd b. Muğîre</span> ve <span class="key">Ebû Cehil</span>'in de bulunduğu söylenen bu topluluk, Resûlullah'a açıkça şunu teklif etti:</p>
+      <blockquote>"Gel bir uzlaşma bulalım. Bir süre sen bizim ilahlarımıza kulluk et, bir süre biz senin Rabbine kulluk edelim. Senin yolun daha iyiyse biz ondan pay almış oluruz; bizim yolumuz daha iyiyse sen pay almış olursun."<span class="quote-attr">— Müşriklerin Teklifi (Rivayetlerden)</span></blockquote>
+      <p>Resûlullah bu teklifi kabul etmedi. "Rabbimden gelecek hükmü beklerim" buyurdu. Bunun üzerine bu sûre indi. Ardından Resûlullah <span class="key">Mescid-i Haram</span>'a gidip Kureyş'in ileri gelenlerinin ortasında ayağa kalktı ve bu sûreyi onların yüzüne karşı okudu.</p>
+      <div id="kafirun-tefsir"></div>
+      <h3 class="section-title">"De ki" Emrinin Hikmeti</h3>
+      <p><em>"De ki"</em> emrinin başta gelmesi çok önemlidir. Bu söz <span class="key">Peygamber</span>'in öfkesiyle söylediği bir söz değil, <span class="key">Allah</span>'ın emridir. Resûlullah normalde insanlara yumuşaklıkla, hikmetle, güzel öğütle davranmakla emrolunmuştu. "De ki" ifadesi bunu açıklar: Bu sertlik kişisel değildir, <span class="term">ilâhî hükmün ilanıdır</span>.</p>
+      <div class="ornament-divider"><span>✦</span></div>
+      <h3 class="section-title">Tekrarlı Âyetlerin Hikmeti</h3>
+      <p><em>"Ben sizin taptıklarınıza tapmam. Siz de benim taptığıma tapacak değilsiniz. Ben de sizin taptıklarınıza tapacak değilim. Siz de benim taptığıma tapacak değilsiniz."</em> Bu dört cümle ilk bakışta tekrar gibi görünür. Ama âlimler burada boş bir tekrar olmadığını söylemiştir.</p>
+      <p>Bir açıklamaya göre ilk iki cümle geleceğe bakar; son iki cümle ise şimdiye ve geçmişe. Mananın özü değişmez: Hem bugün, hem yarın, hem geçmişte, hem gelecekte bu iki yol birleşmez.</p>
+      <div id="kafirun-ahlak"></div>
+      <h3 class="section-title">"Sizin Dininiz Size, Benim Dinim Bana"</h3>
+      <p>Bu son âyet sûrenin en meşhur ve en yanlış anlaşılabilecek yeridir. Bunun manası asla "siz küfrünüzde serbestsiniz, ben razıyım" değildir. <span class="key">İbn Abbâs</span> bunu açıkça, <em>"Sizin inkârınız size, benim tevhidim bana"</em> diye açıklamıştır.</p>
+      <p>Burada <span class="term">tehdit</span>, <span class="term">ilişik kesme</span>, <span class="term">ayrım</span>, <span class="term">hesap</span> ve <span class="term">ceza-karşılık</span> manası birlikte vardır. Hepsinin özü birdir: <span class="key">Hak ile bâtıl birbirine karışmayacaktır.</span></p>
+      <h3 class="section-title">Tasavvufî Boyut</h3>
+      <p><span class="term">Tasavvuf</span> ehli bu sûreyi iç âlem açısından da okumuştur. Onlara göre dışarıdaki putlar kadar, içerdeki putlar da vardır. İnsan bazen taş puta secde etmez ama kalbini mala, makama, şöhrete, halkın övgüsüne, korkuya, <span class="term">hevâya</span>, nefse verir. Kâfirûn sûresi işte bu gizli ortaklara da "hayır" der.</p>
+      <div class="surah-summary"><h4>Sûrenin Özü</h4><p>Hem bir iman beyannamesi, hem bir şirkten uzak durma metni, hem bir gece duası, hem namaz sûresi, hem ahlak dersi, hem tasavvufî arınma metni, hem de akideyi koruyan bir kaledir. Yumuşak olmak başka şeydir, hak ile bâtılı karıştırmak başka şeydir.</p></div>
+    `, published: true, createdAt: 1000 },
+  {
+    id: 2, title: "Nasr Sûresi", tag: "Medine Dönemi · 3 Âyet", number: "110",
+    pills: ["110. Sûre", "Veda Sûresi", "Ecel Habercisi"],
+    subLinks: [{id:"nasr-a1", title:"· 1. Âyet: Yardım ve Fetih"}, {id:"nasr-a2", title:"· 2. Âyet: Bölük Bölük Girme"}, {id:"nasr-a3", title:"· 3. Âyet: Tesbih ve İstiğfar"}],
+    content: `
+      <p>Medine döneminde nazil olan ve üç âyetten oluşan <span class="key">Nasr Sûresi</span>, Kur'an-ı Kerîm'de bir bütün olarak en son inen sûredir. <span class="key">İbn Abbâs</span> ve diğer büyük sahabelerin bildirdiğine göre bu sûre, <span class="key">Peygamber Efendimiz</span>'e (sallallahü aleyhi ve sellem) bu dünyadan göçme vaktinin yaklaştığını haber veren ilâhî bir şifredir. Bu yüzdendir ki bu sûreye <span class="term">Tevdi</span> — yani <em>"Veda Sûresi"</em> — de denilmiştir.</p>
+      <blockquote>Bu sûre indiğinde ashab-ı kiram fetih ve zafer müjdesiyle sevinirken, amcası <strong>Hz. Abbas</strong> ağlamaya başlamıştır. Efendimiz "Niçin ağlıyorsun amca?" diye sorduğunda, "Kendi ölüm haberini kendin verdin" demiş, Efendimiz de "Tam senin dediğin gibi" diyerek onu doğrulamıştır.<span class="quote-attr">— Hz. Abbas (r.a.) rivayeti</span></blockquote>
+      <p><span class="key">Hz. Ömer</span>'in, yaşı küçük olmasına rağmen <span class="key">İbn Abbâs</span>'ı Bedir gazilerine denk tutup meclisine almasının sırrı da bu sûredir. Sahabeler bu duruma itiraz edince Hz. Ömer onları toplayıp Nasr sûresinin manasını sormuş, <span class="key">İbn Abbâs</span>, <em>"Bu, Resûlullah'ın ecelidir, Allah ona vefatının yaklaştığını bildiriyor"</em> diyerek sûrenin <span class="term">bâtınî</span> manasını çözmüştür.</p>
+      <div id="nasr-a1"></div>
+      <h3 class="section-title">Birinci Âyet: İlâhî Yardım ve Fethin Gelişi</h3>
+      <div class="verse-display"><span class="verse-arabic">إِذَا جَاءَ نَصْرُ اللَّهِ وَالْفَتْحُ</span>"Allah'ın yardımı ve fetih geldiği zaman…"<span class="verse-ref">Nasr Sûresi, 1. Âyet</span></div>
+      <p><span class="key">Nasr</span> ve <span class="key">Fetih</span> arasındaki fark şudur: Nasr, bir amaca ulaşmak için verilen ilâhî destektir; Fetih ise o yardımın sonucunda kapalı olan kapıların açılmasıdır. Nasr <span class="term">sebeptir</span>, Fetih ise <span class="term">sonuçtur</span>. Âlimlerin çoğunluğuna göre buradaki Fetih, <em>"Fetihlerin Fethi"</em> olan <span class="key">Mekke'nin fethidir</span>.</p>
+      <p>Hicretin 8. yılı Ramazan ayında 10.000 kişilik bir orduyla Mekke'ye girilirken Efendimiz o kadar <span class="term">mütevazıydı</span> ki, devesinin üzerinde Allah'a şükründen dolayı başı adeta eğere değiyordu. Mekke'ye girildiğinde Efendimiz kan dökmemiş, <span class="key">Kureyş</span>lilere:</p>
+      <blockquote>"Benden ne bekliyorsunuz?" diye sormuştur. Onlar "Sen kerem sahibi bir kardeşsin" deyince, "Gidin, hepiniz serbestsiniz" buyurarak eşsiz bir ahlak sergilemiştir.<span class="quote-attr">— Mekke Fethi Rivayeti (Tülekâ)</span></blockquote>
+      <div id="nasr-a2"></div>
+      <h3 class="section-title">İkinci Âyet: İnsanların Bölük Bölük İslam'a Girmesi</h3>
+      <p>Mekke fethedilince Arap kabileleri aralarında şöyle konuştular: <em>"Muhammed, Allah'ın Fil Ordusundan koruduğu o kutsal Harem halkına bile galip geldiyse, o kesinlikle hak peygamberdir."</em> Bu mantıkla, eskiden birer ikişer Müslüman olan insanlar, artık kabileler hâlinde, <span class="term">fevc fevc</span> (dalga dalga) İslam'a girmeye başladılar.</p>
+      <div class="highlight-box">
+        <div class="highlight-box-title">Kelâm Meselesi: Mukallidin İmanı</div>
+        <p>Bu âyet, İslam kelâmındaki önemli bir tartışmaya ışık tutar: Allah'ın varlığını derin felsefi delillerle bilmeyen, sadece sade bir şekilde iman eden sıradan insanların imanı kabul müdür?</p>
+        <p>Âlimlerin çoğunluğu bu âyete dayanarak "Evet, geçerlidir ve sahihtir" demiştir. Çünkü Allah, felsefi delilleri bilmeyen bu kalabalıkların imanını övmüş ve bunu Peygamberine en büyük nimet olarak sunmuştur.</p>
+      </div>
+      <div id="nasr-a3"></div>
+      <h3 class="section-title">Üçüncü Âyet: Tesbih, Hamd ve İstiğfar</h3>
+      <p>Yüce Allah burada sırasıyla üç görev veriyor: <span class="term">Tesbih</span> (Allah'ı kusurlardan arındırmak), <span class="term">Tahmid</span> (O'na şükretmek) ve <span class="term">İstiğfar</span> (bağışlanma dilemek). Bu sıra, Yaratıcıdan yaratılana doğru inen mânevî bir yolculuğu temsil eder.</p>
+      <p>Akla şu soru gelebilir: Günahsız (<span class="term">masum</span>) olan bir Peygamber neden istiğfar etsin? Bunun pek çok sırrı vardır:</p>
+      <ul class="numbered-list">
+        <li>Ümmeti için istiğfar etmesidir; insanlar çoğaldıkça ümmetin günahı da artacaktır.</li>
+        <li>Bize örnek ve model olmasıdır; o bile istiğfar ediyorsa, günahkâr bizlerin ne yapması gerektiğini göstermektedir.</li>
+        <li>Mânevî yolculuk (<span class="term">seyr-u sülûk</span>) sonsuzdur; her üst makama yükseldiğinde bir önceki hali için istiğfar etmiştir.</li>
+        <li>İntikam almaktan vazgeçip affetmeye teşviktir; Allah ona "istiğfar et" deyince, o da Mekkelileri affetmiştir.</li>
+      </ul>
+      <div class="surah-summary"><h4>Sûrenin Mesajı</h4><p>Bu sûre, bir yandan İslam'ın en büyük zaferini kutlarken, diğer yandan her kemâlin bir sonu olduğunu ve en büyük zafer anlarında bile kibre kapılmadan başı eğerek Allah'a sığınmayı öğreten, Peygamberimizin ayrılık hüznüyle zafer coşkusunu aynı anda yaşatan ilâhî bir mucizedir.</p></div>
+    `, published: true, createdAt: 1001 },
+  {
+    id: 3, title: "Tebbet (Mesed) Sûresi", tag: "Mekke Dönemi · 5 Âyet", number: "111",
+    pills: ["111. Sûre", "İlâhî Adaletin Tecellisi", "Gaybî Haber İçerir"],
+    subLinks: [{id:"tebbet-nuzul", title:"· İniş Sebebi"}, {id:"tebbet-ayetler", title:"· Âyetlerin Tefsiri"}],
+    content: `
+      <p>Mekke'nin o zorlu günlerinde, hakikatin ışığı yeni yeni parlamaya başladığı bir dönemde inen bu mübarek sûre, beş âyetten oluşur. Kâinatın Efendisi şöyle buyurmuşlardır:</p>
+      <blockquote>"Kim Tebbet sûresini okursa, dilerim ki Allah, onunla Ebû Leheb'i aynı yurtta (cehennemde) bir araya getirmez."<span class="quote-attr">— Resûlullah (s.a.v.)</span></blockquote>
+      <div id="tebbet-nuzul"></div>
+      <h3 class="section-title">İniş Sebebi: Safa Tepesi Hâdisesi</h3>
+      <p>Yüce Allah, <em>"En yakın akrabalarını uyar"</em> emrini verdiğinde, <span class="key">Peygamber Efendimiz</span> <span class="key">Safa tepesine</span> çıkmış ve <em>"Ya Sabâhâh!"</em> diye seslenmişti. Kureyş toplandığında Efendimiz onları uyarınca, öz amcası olan <span class="key">Ebû Leheb</span> kibrine yenik düşerek eline bir taş aldı ve <em>"Tebben lek! Bizi bunun için mi buraya topladın!"</em> diyerek hakaret etti.</p>
+      <div id="tebbet-ayetler"></div>
+      <h3 class="section-title">1. Âyet: İki Elin Helâki</h3>
+      <div class="verse-display"><span class="verse-arabic">تَبَّتْ يَدَا أَبِي لَهَبٍ وَتَبَّ</span>"Ebû Leheb'in iki eli kurusun (helâk olsun), kurudu da (zaten helâk oldu)."<span class="verse-ref">Tebbet Sûresi, 1. Âyet</span></div>
+      <p>Ayette özellikle <em>"iki eli"</em> ifadesinin kullanılması çok derin manalar taşır. Arapçada bir insanın "elleri", onun bütün varlığını, gücünü ve bizzat kendisini temsil eder (<span class="term">mecaz-ı mürsel</span>). Yani <em>"onun bütün varlığı, dini, dünyası, öncesi ve sonrası helâk olsun"</em> demektir.</p>
+      <p>Peki, ismi <span class="term">Abdüluzza</span> iken, Kur'an onu neden <span class="key">Ebû Leheb</span> (Alevin Babası) künyesiyle andı? Bunun üç hikmeti vardır:</p>
+      <ul class="numbered-list">
+        <li>Allah, kendi kelamında şirki simgeleyen bir putun adını (Uzza) anmayı o isme layık görmemiştir.</li>
+        <li>Ebû Leheb'in yanakları ateş parçası gibi kırmızıydı, bu yüzden bu lakapla meşhur olmuştu.</li>
+        <li>Onun gideceği yer alev alev yanan cehennem ateşi olduğu için, "Alevin Babası" künyesi onun acı sonuyla mükemmel bir uyum içindeydi. Bu künye bir onurlandırma değil, ateşle olan ebedî akrabalığının tescilidir.</li>
+      </ul>
+      <div class="ornament-divider"><span>✦</span></div>
+      <h3 class="section-title">3. Âyet: Kur'an'ın İcazı ve Kader Meselesi</h3>
+      <p>Bu âyet, Kur'an'ın mucizelerinden birini barındırır. <span class="key">Allah</span>, <span class="key">Ebû Leheb</span> henüz sağken onun asla iman etmeyeceğini ve cehenneme gireceğini kesin bir dille haber vermiştir. <span class="term">Kelâm</span> âlimleri buna <span class="term">"teklif-i mâ lâ yutâk"</span> penceresinden bakmışlardır.</p>
+      <blockquote>Ebû Leheb Kur'an'a iman etmekle emrolunmuştu, ancak Kur'an onun iman etmeyeceğini söylüyordu. Bu zıtlık gibi görünen durum, aslında Allah'ın ezelî ilminin (<span class="term">kaderin</span>) kusursuzluğunu gösterir. Yüce Allah, o katılaşmış kalbin kendi özgür iradesiyle hiçbir zaman hakkı seçmeyeceğini biliyordu ve bunu peşinen ilan etti.<span class="quote-attr">— Kelâm Alimleri</span></blockquote>
+      <h3 class="section-title">4. Âyet: Odun Hamalı Kadın</h3>
+      <p><span class="key">Ebû Leheb</span>'in eşi, Mekke'nin soylularından <span class="key">Ebû Süfyan</span>'ın kız kardeşi <span class="key">Ümmü Cemil</span>'dir. Soylu ve zengin olmasına rağmen kalbi hasetle kararmış bu kadın, kocasının en büyük destekçisiydi. Ayette ona <span class="term">"odun hamalı"</span> (<span class="term">hammâletel hatab</span>) denmesi, hem gerçek hem mecaz anlamları olan çok katmanlı bir tasvirdir.</p>
+      <p><strong>Gerçek mana:</strong> Gece karanlığında dağlardan dikenli çalıları toplar ve Efendimizin geçeceği yollara, kapısının önüne sererdi. Fakat Allah'ın himayesindeki Peygamber, o dikenlerin üzerine sanki ipeğe basarmış gibi basardı.</p>
+      <p><strong>Mecaz mana:</strong> Arapçada <span class="term">"odun taşımak"</span>, laf taşımak, insanların arasını bozmak, fitne ateşi yakmak demektir (<span class="term">kovuculuk / nemîme</span>).</p>
+      <div class="highlight-box">
+        <div class="highlight-box-title">İslam'ın Temel Prensibi</div>
+        <p>Ebû Leheb ve karısı bu acı sonu yaşarken, onların kızı olan <strong>Durre (r.a.)</strong> iman edip Medine'ye hicret etmiştir. Peygamberimiz onun babasının suçuyla yargılanmasına sert tepki gösterip şöyle buyurmuştur: "Dirinin yüzüne ölüsü vurulmaz." Bu, İslam'ın kimseyi babasının suçuyla yargılamadığının ve suçun şahsiliğinin en güzel delilidir.</p>
+      </div>
+    `, published: true, createdAt: 1002 },
+  {
+    id: 4, title: "İhlâs Sûresi", tag: "Mekke / Medine · 4 Âyet", number: "112",
+    pills: ["112. Sûre", "Tevhidin Özeti", "Kur'an'ın ⅓'ü Gibi"],
+    subLinks: [{id:"ihlas-isimler", title:"· Sûrenin İsimleri"}, {id:"ihlas-ayetler", title:"· Âyetlerin Tefsiri"}],
+    content: `
+      <p>Bu dört âyetlik kısa ama kâinatı içine alan sûre, <span class="term">tevhidin</span> — yani Allah'ı birliğinin — Delil ve Mucizelerindendir. Sûrenin gökyüzünden yeryüzüne inmesine üç farklı grubun soruları sebep olmuştur: <span class="key">Mekkeli müşrikler</span>, <span class="key">Yahudi âlimleri</span> ve <span class="key">Necran Hristiyanları</span>.</p>
+      <div id="ihlas-isimler"></div>
+      <h3 class="section-title">Sûrenin Yirmi İsmi</h3>
+      <p>Bir şeyin isimlerinin çokluğu, onun faziletinin büyüklüğünü gösterir. Âlimler bu sûrenin <strong>yirmi ayrı ismini</strong> saymışlardır:</p>
+      <ul class="numbered-list">
+        <li><span class="term">Tevhid</span> — Allah'ın bir ve tek olduğuna inanma</li>
+        <li><span class="term">İhlâs</span> — Samimiyet, gösterişten uzak, katıksız bağlılık</li>
+        <li><span class="term">Tefrid</span> — Allah'ı tek kılma, eşsiz kabul etme</li>
+        <li><span class="term">Necat</span> — Kurtuluş, dünyada şirkten ve ahirette cehennemden kurtarma</li>
+        <li><span class="term">Velâyet</span> — Allah'a dostluk; bunu okuyan Allah'ın dost edinilmiş kulu olur</li>
+        <li><span class="term">Cemal</span> — Güzellik; Peygamberimiz "Allah güzeldir, güzelliği sever" buyurunca bu sûrenin manasını saymıştır</li>
+        <li><span class="term">Mukaşkışa</span> — Şirk ve nifak hastalıklarından kurtaran (Kâfirûn da aynı ismi taşır)</li>
+        <li><span class="term">Nur</span> — Kur'an'ın gözbebeği ve nuru</li>
+      </ul>
+      <div id="ihlas-ayetler"></div>
+      <h3 class="section-title">1. Âyet: Ehad — Mutlak Birlik</h3>
+      <div class="verse-display"><span class="verse-arabic">قُلْ هُوَ اللَّهُ أَحَدٌ</span>"De ki: O Allah'tır, birdir."<span class="verse-ref">İhlâs Sûresi, 1. Âyet</span></div>
+      <p>Dilimizde "Bir" kelimesinin karşılığı olan <span class="term">Vahid</span> ile ayette geçen <span class="term">Ehad</span> arasında çok ince ama dağlar kadar büyük bir fark vardır. <span class="term">Vahid</span> sayılarla ilgilidir; bir derseniz, iki ve üç de var demektir. Ancak <span class="term">Ehad</span> kelimesi mutlaktır; başka bir varlığın olma ihtimalini kökünden siler.</p>
+      <blockquote>İrfan ehli bu "O, Allah, Birdir" sıralamasını manevî bir yolculuğun üç makamı olarak görürler. En yüce makam olan <span class="term">mukarrebler</span> için sadece "O" demek yeterlidir; ikinci sıradaki <span class="term">sağcılar</span> "O, Allah'tır" derler; üçüncü sıradaki <span class="term">solcular</span> ise birden fazla ilah olabileceğini düşündükleri için onlara "Sadece Birdir" kelimesi eklenmiştir.<span class="quote-attr">— Tasavvuf Geleneği</span></blockquote>
+      <h3 class="section-title">2. Âyet: Allah'üs-Samed</h3>
+      <div class="verse-display"><span class="verse-arabic">اللَّهُ الصَّمَدُ</span>"Allah Samed'dir."<span class="verse-ref">İhlâs Sûresi, 2. Âyet</span></div>
+      <p><span class="key">Samed</span> kelimesi üç büyük manayı barındırır: <strong>(1)</strong> Felaket ve musibet anlarında herkesin koşup yardım istediği yüce kapı — tüm kâinatın saniye saniye O'na muhtaç olduğu, ama O'nun hiç kimseye muhtaç olmadığı yegâne zenginlik. <strong>(2)</strong> İçi boş olmayan, yemeyen, içmeyen, som ve yekpare olan — Allah'ı yaratıklara benzeten her iftiraya karşı cevap. <strong>(3)</strong> Her şey yok olup gittikten sonra geriye sadece O'nun kalması.</p>
+      <h3 class="section-title">3. ve 4. Âyetler: Doğurmadı, Doğmadı</h3>
+      <div class="verse-display"><span class="verse-arabic">لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ</span>"Doğurmadı, doğurulmadı. Hiç kimse O'na denk olmadı."<span class="verse-ref">İhlâs Sûresi, 3-4. Âyet</span></div>
+      <p>Bu dört âyet, baştan sona çelikten bir mantık zinciri gibi birbirine bağlıdır:</p>
+      <ul class="numbered-list">
+        <li><strong>Birinci âyet</strong>, <span class="term">teslis</span> inancını ve her türlü ortaklık iddiasını yıkarak Allah'ın parçalanmazlığını ilan eder.</li>
+        <li><strong>İkinci âyet</strong>, ihtiyaç ve noksanlık ifade eden her şeyi silip <span class="term">çok tanrıcılığı</span> bitirir.</li>
+        <li><strong>Üçüncü âyet</strong>, sebep-sonuç ve soy zincirini yıkarak O'nun kimsenin babası veya çocuğu olmadığını beyan eder.</li>
+        <li><strong>Dördüncü âyet</strong>, putları Allah'a eş koşan gizli ve açık her türlü <span class="term">şirki</span> bitirir.</li>
+      </ul>
+      <div class="surah-summary"><h4>Sûrenin Gücü</h4><p>İnsan aklının aradığı o güvenilir ve kusursuz kapı da, kalbin aradığı sığınılacak sonsuz zenginlik de buradadır. Cennetin kapılarını aralayan bu sırlar, sadece okuyan dillerde değil, idrak eden kalplerde gerçek manasını bulur.</p></div>
+    `, published: true, createdAt: 1003 },
+  {
+    id: 5, title: "Felak Sûresi", tag: "Medine Dönemi · 5 Âyet", number: "113",
+    pills: ["113. Sûre", "El-Mukaşkışeteyn'in İlki", "Şifa Kalesi"],
+    subLinks: [{id:"felak-nuzul", title:"· Sihir Hâdisesi"}, {id:"felak-ayetler", title:"· Âyetlerin Tefsiri"}],
+    content: `
+      <p>Felak sûresi ve ardındaki <span class="key">Nâs sûresi</span>, insanı <span class="term">nifak</span> hastalıklarından ve her türlü şerden kurtarıp şifaya kavuşturdukları için birlikte <span class="term">El-Mukaşkışeteyn</span> olarak anılır. Bu iki sûre, Kur'an-ı Kerîm'in son kalesi ve sığınma dualarının zirvesidir.</p>
+      <blockquote>Peygamber Efendimiz fırtınalı bir gecede <strong>Ukbe bin Âmir</strong>'e dönerek: "Ey Ukbe, bunlarla Allah'a sığın. Hiçbir insan bu ikisinden daha üstün bir şeyle Allah'a sığınmış değildir" buyurmuştur.<span class="quote-attr">— Ukbe b. Âmir (r.a.) rivayeti</span></blockquote>
+      <div id="felak-nuzul"></div>
+      <h3 class="section-title">İniş Sebebi: Sihir Hâdisesi</h3>
+      <p>Rivayetlere göre, Yahudilerin önde gelenlerinden <span class="key">Lebid</span> adlı büyücü, Efendimizin saç tellerini kullanarak bir yay kirişine on bir adet düğüm atmış, içlerine iğneler batırarak şiddetli bir büyü yapmıştır. Bu büyülü malzemeyi de kuyu dibindeki büyük bir kayanın altına saklamıştır.</p>
+      <p><span class="key">Hz. Ali</span>, <span class="key">Zübeyr</span> ve <span class="key">Ammâr b. Yâsir</span> (radıyallahü anhüm) o kuyuya gidip suyu çektiklerinde, suyun kına gibi kıpkırmızı olduğunu görmüşlerdir. İşte o an Allah, toplam on bir âyetten oluşan Felak ve Nâs sûrelerini indirmiştir.</p>
+      <div class="highlight-box">
+        <div class="highlight-box-title">Kelâm Tartışması: Peygambere Büyü Etkisi Yapar mı?</div>
+        <p><span class="term">Mutezile</span> mezhebinden bazıları bu olayı inkâr etmişlerdir. Ancak <span class="term">Ehl-i Sünnet</span> âlimleri meseleyi şöyle çözmüştür: Allah, Peygamberimizi vahyi iletme, akıl ve peygamberlik <span class="term">ismeti</span> açısından kesinlikle korumuştur. Büyünün ona etkisi sadece "beşerî" bir hastalıktır — nasıl ki savaşta hastalanmışsa. Bu durum, aslında onun peygamberliğini daha da yüceltmiştir; çünkü o, iyileşmek için tamamen Allah'ın vahyine sarılmıştır.</p>
+      </div>
+      <div id="felak-ayetler"></div>
+      <h3 class="section-title">1. Âyet: Sabahın Rabbine Sığınmak</h3>
+      <p><span class="term">Felak</span> kelimesi; yarmak, yarıp çıkarmak anlamlarına gelir. Bu kelimenin tefsirinde dehşet verici bir anlam zenginliği vardır:</p>
+      <ul class="numbered-list">
+        <li><strong>Sabah:</strong> Allah gecenin zifiri karanlığını yarıp aydınlık sabahı nasıl çıkarıyorsa, darda kalmış kulunun üzerindeki bela karanlıklarını da öyle yarıp atacak kudrettedir.</li>
+        <li><strong>Yaratılış:</strong> Her şey bir yarılma ile meydana gelir; tohum çatlar bitki çıkar, yokluk karanlığı yarılır varlık âlemi ortaya çıkar.</li>
+        <li><strong>Cehennemdeki Zindan:</strong> Kapağı açıldığında cehennemliklerin feryat ettiği korkunç bir vadinin adı. Allah bize o dehşetli azabın sahibinin engin rahmetine sığınmamızı emretmektedir.</li>
+      </ul>
+      <h3 class="section-title">3. Âyet: Gecenin Şerri</h3>
+      <p><span class="term">Ğâsık</span>, karanlık ve soğuk anlamına gelir; <span class="term">Vekab</span> ise bu karanlığın etrafı kaplaması. Bir güçlü tefsire göre ise "Ğâsık", <span class="key">Ay</span>'dır. Nitekim <span class="key">Tirmizî</span>'de geçen sahih hadiste Peygamberimiz dolunaya bakmış ve Hz. Âişe'ye <em>"Şunun şerrinden Allah'a sığın, işte ğâsık budur"</em> buyurmuştur.</p>
+      <h3 class="section-title">4. Âyet: Düğümlere Üfüren Büyücüler</h3>
+      <p>Bu âyet, büyücü kadınlara ve genel olarak iplere düğümler atıp üzerlerine tılsımlı sözler okuyarak üfleyen tüm sihirbazlara işaret eder. <span class="term">Büyü (sihir)</span>, insan psikolojisini alt üst eden, karı-kocanın arasını ayıran, iradeyi bağlayan ve dinen <span class="term">şirk</span> sayılan büyük bir günahtır.</p>
+      <h3 class="section-title">5. Âyet: Hasedin Şerri</h3>
+      <p>Sûre, ahlaki hastalıkların en korkuncu olan <span class="term">haset</span> ile zirveye ulaşır. Haset; başkasına verilen nimetin o kimseden alınıp yok olmasını arzulamaktır. Gökyüzünde işlenen ilk günah <span class="key">İblis</span>'in <span class="key">Hz. Âdem</span>'e olan hasedi, yeryüzünde işlenen ilk günah ise <span class="key">Kabil</span>'in kardeşi <span class="key">Habil</span>'i öldürmesidir.</p>
+      <blockquote>"Ateşin odunu yiyip bitirdiği gibi, haset de iyilikleri yer bitirir."<span class="quote-attr">— Resûlullah (s.a.v.)</span></blockquote>
+    `, published: true, createdAt: 1004 },
+  {
+    id: 6, title: "Nâs Sûresi", tag: "Mekke / Medine · 6 Âyet", number: "114",
+    pills: ["114. Sûre", "Kur'an'ın Son Kalesi"],
+    subLinks: [{id:"nas-vesvese", title:"· Vesvese ve Şeytan"}, {id:"nas-hatim", title:"· Hatim Duaları"}],
+    content: `
+      <p>Kur'an-ı Kerîm'in son sûresi olan <span class="key">Nâs Sûresi</span>, bizi hem bedenî hem ruhî hem de manevî tehlikelere karşı koruyan üçlü bir İlâhî zırh sunar. Sûrede Allah'ın üç yüce sıfatı peş peşe anılır: <span class="term">Rabb</span> (terbiye eden), <span class="term">Melik</span> (hükümdar) ve <span class="term">İlâh</span> (tapınılan).</p>
+      <p>Bu üç sıfatın peş peşe sıralanmasının hikmeti şudur: Kendisinden sığınılan düşman, insanlara kasteden şeytandır. <span class="key">Allah</span> burada, <em>"Benim kullarımın üzerinde senin bir etkin olamaz"</em> (Hicr Sûresi, 42) ayetiyle insanın kendi koruması altında olduğunu ilan edip şeytana gözdağı vermektedir.</p>
+      <div id="nas-vesvese"></div>
+      <h3 class="section-title">Vesvese ve Şeytanın Altı Tuzağı</h3>
+      <p><span class="term">Vesvâs</span>, hissedilen fakat kaçınılması zor olan gizli fısıltı demektir. Şeytan bu fısıltıyı durmadan tekrarladığı için, sanki bizzat vesvesenin ta kendisi olmuş ve ona bu isim verilmiştir. Şeytanın saldırısı rastgele değildir, adım adım gelir:</p>
+      <ul class="numbered-list">
+        <li><strong>İnkâr ve şirk:</strong> İlk hedefi budur. Başarırsa içi rahatlar.</li>
+        <li><strong>Bid'at:</strong> İlkini yapamazsa dinde sonradan uydurulan yollara çeker. İblis bunu günahtan daha çok sever; çünkü insan günahı bilince tövbe eder, bid'ati doğru sanıp tövbe etmez.</li>
+        <li><strong>Büyük günahlar:</strong> Bunda da başarısız olursa bütün çeşitleriyle büyük günahlara sürükler.</li>
+        <li><strong>Küçük günahlar:</strong> Üst üste yığılıp devasa bir ateş yakan küçücük odunlar gibidir.</li>
+        <li><strong>Boş işler:</strong> Sevabı da günahı da bulunmayan boş işlerle meşgul edip vakti çalar.</li>
+        <li><strong>Daha az sevaplı iş:</strong> Kişiyi daha büyük sevaplı bir işten alıkoyup, daha az sevaplı bir işle oyalar.</li>
+      </ul>
+      <h3 class="section-title">Hannâs: Geri Çekilen Vesveseci</h3>
+      <p><span class="term">Hannâs</span>; insan Rabbini andığı zaman sinip geri çekilmeyi huy edinen demektir. O, ateşten yaratılmış görünmez ince bir varlıktır, hava ile karışarak insana özel yollardan girer.</p>
+      <blockquote>Velîlerden birisi Yüce Allah'a dua edip şeytanın nasıl gelip vesvese verdiğini görmek ister. Bunun üzerine Allah ona insanı cam gibi şeffaf bir şekilde gösterir. İnsanın iki omuzu arasında kuş yuvası gibi siyah bir boşluk vardır. Domuz kılığında, fil hortumu gibi uzun hortumu olan sinsi şeytan gelir. Kul Allah'ı andığı an o hortum gerisin geriye çekilir. İşte "Hannâs" budur; <strong>zikrin nuru yanınca kaçandır!</strong><span class="quote-attr">— Tasavvuf Geleneğinden</span></blockquote>
+      <div class="highlight-box">
+        <div class="highlight-box-title">İki Sûre Arasındaki Denge</div>
+        <p><strong>Felak sûresinde</strong> Allah'ın sadece bir sıfatı (Sabahın Rabbi) anılır, buna karşılık üç büyük şerden (Gece, Büyücüler, Kıskançlar) sığınılır.</p>
+        <p><strong>Nâs sûresinde</strong> ise Allah'ın üç sıfatı (Rabb, Melik, İlâh) peş peşe anılır, ancak sadece bir tek şerden (Vesvese) sığınılır.</p>
+        <p>Bunun sırrı şudur: Felak'taki dertler bedene ve dünyaya ait kötülüklerdir. Nâs'taki dert ise dine ve imana aittir. Dinin zarar görmesi, bedenin yara almasından çok daha tehlikeli olduğu için, Allah'a yakarış da o oranda artmıştır.</p>
+      </div>
+      <div id="nas-hatim"></div>
+      <h3 class="section-title">Hatim Duaları</h3>
+      <p><span class="key">İmam Buhârî</span>'den şöyle aktarılmıştır: <em>"Her hatimde kabul olan bir dua vardır. Kişi Kur'an'ı bitirdiğinde melek onun alnından öper."</em></p>
+      <blockquote>"Allah'ım! Bu yüce Kur'an'la bana merhamet et. Onu benim için önder, nur, hidayet ve rahmet kıl. Allah'ım! Kur'an'dan unuttuklarımı bana hatırlat. Ondan bilmediklerimi bana öğret. Gece gündüz Kur'an okumakla beni rızıklandır. Ey Âlemlerin Rabbi! Kur'an'ı benim için kurtarıcı bir delil yap."<span class="quote-attr">— Resûlullah'ın (s.a.v.) Hatim Duası</span></blockquote>
+      <div class="surah-summary"><h4>Kapanış</h4><p>Dualarımızın sonu, "Âlemlerin Rabbi olan Allah'a hamdolsun" demektir. Rabbim bizi bu düşmandan korusun, Kur'an'ın nurunu üzerimizden eksik etmesin. Âmîn.</p></div>
+    `, published: true, createdAt: 1005 }
+];
+
+
+// ══════════════════════════════════════════════════════════════
+//  SITE INTERACTIONS & CMS LOGIC
+// ══════════════════════════════════════════════════════════════
+
+const STORAGE_KEY = 'tefsir_cms_v2';
+let currentEditId = null;
+
+// Intersection Observers for Animations & TOC
 const revealObs = new IntersectionObserver((entries) => {
   entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); } });
 }, { threshold: 0.06 });
-cards.forEach(c => revealObs.observe(c));
 
-// Active TOC
 const tocObs = new IntersectionObserver((entries) => {
   entries.forEach(e => {
     if (e.isIntersecting) {
@@ -827,30 +698,135 @@ const tocObs = new IntersectionObserver((entries) => {
     }
   });
 }, { rootMargin: '-20% 0% -70% 0%' });
-document.querySelectorAll('[id]').forEach(s => tocObs.observe(s));
 
-
-// ══════════════════════════════════════════════════════════════
-//  CMS PANEL
-// ══════════════════════════════════════════════════════════════
-
-const STORAGE_KEY = 'tefsir_cms_v1';
-let currentEditId = null;
-
-// ── Storage ──────────────────────────────────────────────────
-function loadArticles() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
-  catch { return []; }
+// Initialize Data (Firebase or LocalStorage)
+async function fetchArticles() {
+  if (USE_FIREBASE && db) {
+    try {
+      const snapshot = await db.collection('articles').orderBy('createdAt', 'asc').get();
+      if (snapshot.empty) {
+        // İlk kurulumda Firebase boşsa default verileri yükle
+        defaultArticles.forEach(art => db.collection('articles').doc(art.id.toString()).set(art));
+        return defaultArticles;
+      }
+      let arr = [];
+      snapshot.forEach(doc => arr.push({ id: doc.id, ...doc.data() }));
+      return arr;
+    } catch (e) {
+      console.error("Firebase Hatası:", e);
+      return loadLocalArticles(); // Hata durumunda lokale dön
+    }
+  } else {
+    return loadLocalArticles();
+  }
 }
-function saveArticles(arr) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+
+function loadLocalArticles() {
+  let arr = [];
+  try { arr = JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch (e) {}
+  if (!arr || arr.length === 0) {
+    arr = defaultArticles;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+  }
+  return arr;
 }
 
-// ── Panel open/close ─────────────────────────────────────────
-function openEditor(articleId) {
+async function saveArticles(articlesArray) {
+  if (USE_FIREBASE && db) {
+    // Firebase kullanıyorsak sadece ilgili dökümanı güncelle (bu fonskiyonu yayınla bölümünde ele alıyoruz)
+  } else {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(articlesArray));
+  }
+}
+
+// Render Engine
+async function renderAll() {
+  const articles = await fetchArticles();
+  const container = document.getElementById('articles-container');
+  container.innerHTML = '';
+
+  const activeArticles = articles.filter(a => a.published);
+  
+  activeArticles.forEach(art => {
+    const id = 'cms-' + art.id;
+    const pills = (art.pills || []).map(p => `<span class="surah-pill">${p}</span>`).join('');
+    
+    // Eski yazılar için formatlı tarih atama, yeniler için güncel tarih
+    let dateStr = art.tag; // Varsayılan sadece etiket
+    
+    const html = `
+      <article class="surah-card" id="${id}" data-section="${id}" data-cms="${art.id}">
+        <header class="surah-header" data-number="${art.number || ''}">
+          <button class="cms-edit-btn" onclick="openEditor(${art.id})">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Düzenle
+          </button>
+          <div class="surah-tag">${dateStr || ''}</div>
+          <h2 class="surah-title">${art.title}</h2>
+          <div class="surah-info">${pills}</div>
+        </header>
+        <div class="surah-body">${art.content}</div>
+      </article>`;
+    
+    container.insertAdjacentHTML('beforeend', html);
+  });
+
+  // Re-observe UI
+  document.querySelectorAll('.surah-card').forEach(card => revealObs.observe(card));
+  updateTOC(activeArticles);
+}
+
+function updateTOC(articles) {
+  const tocList = document.getElementById('toc-list');
+  tocList.innerHTML = '';
+  
+  articles.forEach(art => {
+    const li = document.createElement('li');
+    li.innerHTML = `<a href="#cms-${art.id}" class="toc-link">${art.title}</a>`;
+    tocList.appendChild(li);
+
+    // Eğer sabit alt başlıkları (subLinks) varsa onları da ekle
+    if (art.subLinks && art.subLinks.length > 0) {
+      art.subLinks.forEach(sub => {
+        const subLi = document.createElement('li');
+        subLi.innerHTML = `<a href="#${sub.id}" class="toc-link toc-sub">${sub.title}</a>`;
+        tocList.appendChild(subLi);
+      });
+    }
+  });
+
+  document.querySelectorAll('[id]').forEach(s => tocObs.observe(s));
+}
+
+// ── Progress Bar & BTT ──
+const progressBar = document.getElementById('progress-bar');
+const btt = document.getElementById('back-to-top');
+window.addEventListener('scroll', () => {
+  const s = window.scrollY, max = document.documentElement.scrollHeight - window.innerHeight;
+  progressBar.style.width = (s / max * 100) + '%';
+  btt.classList.toggle('visible', s > 400);
+}, { passive: true });
+btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+// ── Sidebar Toggle ──
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('overlay');
+const menuBtn = document.getElementById('menu-btn');
+function openSidebar()  { sidebar.classList.add('open'); overlay.classList.add('active'); document.body.style.overflow = 'hidden'; }
+function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('active'); document.body.style.overflow = ''; }
+menuBtn.addEventListener('click', () => sidebar.classList.contains('open') ? closeSidebar() : openSidebar());
+overlay.addEventListener('click', closeSidebar);
+document.addEventListener('click', (e) => {
+  if (e.target.classList.contains('toc-link') && window.innerWidth < 900) closeSidebar();
+});
+
+
+// ── Editor Functions ──
+async function openEditor(articleId) {
   currentEditId = articleId || null;
   if (articleId) {
-    const art = loadArticles().find(a => a.id === articleId);
+    const articles = await fetchArticles();
+    const art = articles.find(a => a.id == articleId);
     if (art) loadIntoEditor(art);
   } else {
     clearEditor();
@@ -860,6 +836,7 @@ function openEditor(articleId) {
   document.getElementById('editor-overlay').classList.add('active');
   document.body.style.overflow = 'hidden';
 }
+
 function closeEditor() {
   document.getElementById('editor-panel').classList.remove('open');
   document.getElementById('editor-overlay').classList.remove('active');
@@ -867,7 +844,6 @@ function closeEditor() {
 }
 document.getElementById('editor-overlay').addEventListener('click', closeEditor);
 
-// ── Views ────────────────────────────────────────────────────
 function showView(name) {
   document.querySelectorAll('.ep-view').forEach(v => v.classList.remove('active'));
   document.querySelectorAll('.ep-tab').forEach(t => t.classList.remove('active'));
@@ -877,7 +853,6 @@ function showView(name) {
   if (name === 'manage') renderManageList();
 }
 
-// ── Editor helpers ───────────────────────────────────────────
 function clearEditor() {
   document.getElementById('ep-title').value = '';
   document.getElementById('ep-tag').value = '';
@@ -886,6 +861,7 @@ function clearEditor() {
   document.getElementById('editor-content').innerHTML = '';
   document.querySelector('.ep-btn-publish').textContent = 'Yayımla';
 }
+
 function loadIntoEditor(art) {
   document.getElementById('ep-title').value = art.title || '';
   document.getElementById('ep-tag').value = art.tag || '';
@@ -895,7 +871,7 @@ function loadIntoEditor(art) {
   document.querySelector('.ep-btn-publish').textContent = 'Güncelle';
 }
 
-// ── Toolbar: insert blocks ────────────────────────────────────
+// Toolbar
 const BLOCKS = {
   p:          `<p>Metin buraya yazılır...</p>`,
   h3:         `<h3 class="section-title">Bölüm Başlığı</h3>`,
@@ -913,18 +889,13 @@ function insertBlock(type) {
   document.execCommand('insertHTML', false, BLOCKS[type]);
 }
 
-// ── Toolbar: inline wraps ─────────────────────────────────────
 function wrapInline(cls) {
   const sel = window.getSelection();
-  if (!sel || sel.isCollapsed) {
-    alert(`Önce metni seçin, sonra "${cls}" düğmesine tıklayın.`); return;
-  }
+  if (!sel || sel.isCollapsed) { alert(`Önce metni seçin, sonra "${cls}" düğmesine tıklayın.`); return; }
   const range = sel.getRangeAt(0);
   const span = document.createElement('span');
   span.className = cls;
-  try {
-    range.surroundContents(span);
-  } catch {
+  try { range.surroundContents(span); } catch {
     const text = range.toString();
     span.textContent = text;
     range.deleteContents();
@@ -933,142 +904,95 @@ function wrapInline(cls) {
   sel.removeAllRanges();
 }
 
-// ── Editor: keep Enter as <p> ─────────────────────────────────
 document.getElementById('editor-content').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    document.execCommand('insertParagraph', false);
-  }
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); document.execCommand('insertParagraph', false); }
 });
-
-// Paste as plain text
 document.getElementById('editor-content').addEventListener('paste', function(e) {
-  e.preventDefault();
-  const text = (e.clipboardData || window.clipboardData).getData('text/plain');
-  document.execCommand('insertText', false, text);
+  e.preventDefault(); const text = (e.clipboardData || window.clipboardData).getData('text/plain'); document.execCommand('insertText', false, text);
 });
 
-// ── Preview ──────────────────────────────────────────────────
 function updatePreview() {
-  const title  = document.getElementById('ep-title').value || 'Başlık';
-  const tag    = document.getElementById('ep-tag').value || '';
-  const number = document.getElementById('ep-number').value || '';
-  const pillsR = document.getElementById('ep-pills').value || '';
-  const body   = document.getElementById('editor-content').innerHTML;
-
-  document.getElementById('preview-header').setAttribute('data-number', number);
-  document.getElementById('preview-tag').textContent = tag;
-  document.getElementById('preview-title').textContent = title;
-  document.getElementById('preview-body').innerHTML = body;
+  document.getElementById('preview-header').setAttribute('data-number', document.getElementById('ep-number').value);
+  document.getElementById('preview-tag').textContent = document.getElementById('ep-tag').value;
+  document.getElementById('preview-title').textContent = document.getElementById('ep-title').value || 'Başlık';
+  document.getElementById('preview-body').innerHTML = document.getElementById('editor-content').innerHTML;
+  const pillsR = document.getElementById('ep-pills').value;
   const pills = pillsR ? pillsR.split(',').map(p => p.trim()).filter(Boolean) : [];
   document.getElementById('preview-pills').innerHTML = pills.map(p => `<span class="surah-pill">${p}</span>`).join('');
 }
 
-// ── Publish ──────────────────────────────────────────────────
-function publishArticle() {
-  const title  = document.getElementById('ep-title').value.trim();
-  const tag    = document.getElementById('ep-tag').value.trim();
-  const number = document.getElementById('ep-number').value.trim();
-  const pillsR = document.getElementById('ep-pills').value.trim();
+async function publishArticle() {
+  const title = document.getElementById('ep-title').value.trim();
   const content = document.getElementById('editor-content').innerHTML.trim();
-
   if (!title) { alert('Lütfen bir başlık girin.'); return; }
   if (!content || content === '<br>') { alert('Lütfen içerik girin.'); return; }
 
+  const pillsR = document.getElementById('ep-pills').value.trim();
   const pills = pillsR ? pillsR.split(',').map(p => p.trim()).filter(Boolean) : [];
-  const articles = loadArticles();
+  
+  const articleData = {
+    title: title,
+    tag: document.getElementById('ep-tag').value.trim(),
+    number: document.getElementById('ep-number').value.trim(),
+    pills: pills,
+    content: content,
+    published: true,
+    updatedAt: Date.now()
+  };
 
-  if (currentEditId) {
-    const idx = articles.findIndex(a => a.id === currentEditId);
-    if (idx !== -1) {
-      articles[idx] = { ...articles[idx], title, tag, number, pills, content, updatedAt: Date.now() };
-    }
+  if (USE_FIREBASE && db) {
+    try {
+      if (currentEditId) {
+        await db.collection('articles').doc(currentEditId.toString()).update(articleData);
+      } else {
+        const newId = Date.now();
+        articleData.id = newId;
+        articleData.createdAt = newId;
+        await db.collection('articles').doc(newId.toString()).set(articleData);
+      }
+    } catch(e) { alert("Kaydedilirken hata oluştu!"); console.error(e); }
   } else {
-    articles.push({ id: Date.now(), title, tag, number, pills, content, published: true, createdAt: Date.now() });
+    const articles = await fetchArticles();
+    if (currentEditId) {
+      const idx = articles.findIndex(a => a.id == currentEditId);
+      if (idx !== -1) {
+        // Eski subLinks kaybolmasın diye Object assign yapıyoruz
+        articles[idx] = { ...articles[idx], ...articleData };
+      }
+    } else {
+      const newId = Date.now();
+      articleData.id = newId;
+      articleData.createdAt = newId;
+      articles.push(articleData);
+    }
+    await saveArticles(articles);
   }
 
-  saveArticles(articles);
-  renderAllCMSArticles();
-  updateTOC();
+  await renderAll();
   closeEditor();
 }
 
-// ── Render CMS articles on page ──────────────────────────────
-function renderAllCMSArticles() {
-  // Remove old CMS cards
-  document.querySelectorAll('.surah-card[data-cms]').forEach(el => el.remove());
-
-  const articles = loadArticles().filter(a => a.published);
-  const footer = document.querySelector('.site-footer');
-
-  articles.forEach(art => {
-    const id = 'cms-' + art.id;
-    const pills = (art.pills || []).map(p => `<span class="surah-pill">${p}</span>`).join('');
-    const date = new Date(art.updatedAt || art.createdAt).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
-
-    const html = `
-      <article class="surah-card" id="${id}" data-section="${id}" data-cms="${art.id}">
-        <header class="surah-header" data-number="${art.number || ''}">
-          <button class="cms-edit-btn" onclick="openEditor(${art.id})">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:11px;height:11px"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-            Düzenle
-          </button>
-          <div class="surah-tag">${art.tag || ''}${art.tag ? ' · ' : ''}${date}</div>
-          <h2 class="surah-title">${art.title}</h2>
-          <div class="surah-info">${pills}</div>
-        </header>
-        <div class="surah-body">${art.content}</div>
-      </article>`;
-
-    footer.insertAdjacentHTML('beforebegin', html);
-  });
-
-  // Observe new cards
-  document.querySelectorAll('.surah-card[data-cms]').forEach(card => {
-    revealObs.observe(card);
-    tocObs.observe(card);
-  });
-}
-
-// ── Update sidebar TOC ────────────────────────────────────────
-function updateTOC() {
-  // Remove existing CMS TOC items
-  document.querySelectorAll('.toc-list li[data-cms-toc]').forEach(el => el.remove());
-  const tocList = document.getElementById('toc-list');
-  loadArticles().filter(a => a.published).forEach(art => {
-    const li = document.createElement('li');
-    li.setAttribute('data-cms-toc', art.id);
-    li.innerHTML = `<a href="#cms-${art.id}" class="toc-link">${art.title}</a>`;
-    tocList.appendChild(li);
-  });
-  // Re-observe
-  document.querySelectorAll('[id]').forEach(s => tocObs.observe(s));
-}
-
-// ── Manage list ───────────────────────────────────────────────
-function renderManageList() {
-  const articles = loadArticles();
+async function renderManageList() {
+  const articles = await fetchArticles();
   const wrap = document.getElementById('manage-list');
 
   if (!articles.length) {
-    wrap.innerHTML = `<div class="ep-manage-empty"><span>✦</span>Henüz yayımlanmış yazı yok.<br>Yaz sekmesinden yeni bir yazı oluşturun.</div>`;
+    wrap.innerHTML = `<div class="ep-manage-empty"><span>✦</span>Henüz yayımlanmış yazı yok.</div>`;
     return;
   }
 
   wrap.innerHTML = articles.map(art => {
-    const date = new Date(art.updatedAt || art.createdAt).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
     return `
       <div class="ep-article-card">
         <div class="ep-article-info">
           <div class="ep-article-title">${art.title}</div>
           <div class="ep-article-meta">
             <span>${art.tag || '—'}</span>
-            <span>${date}</span>
           </div>
         </div>
         <div class="ep-article-actions">
-          <button class="ep-act-btn" onclick="editArticle(${art.id})">Düzenle</button>
-          <button class="ep-act-btn delete" onclick="deleteArticle(${art.id})">Sil</button>
+          <button class="ep-act-btn" onclick="editArticle('${art.id}')">Düzenle</button>
+          <button class="ep-act-btn delete" onclick="deleteArticle('${art.id}')">Sil</button>
         </div>
       </div>`;
   }).join('');
@@ -1079,18 +1003,24 @@ function editArticle(id) {
   showView('write');
 }
 
-function deleteArticle(id) {
+async function deleteArticle(id) {
   if (!confirm('Bu yazıyı silmek istediğinizden emin misiniz?')) return;
-  const articles = loadArticles().filter(a => a.id !== id);
-  saveArticles(articles);
-  renderAllCMSArticles();
-  updateTOC();
+  
+  if (USE_FIREBASE && db) {
+    await db.collection('articles').doc(id.toString()).delete();
+  } else {
+    const articles = await fetchArticles();
+    const filtered = articles.filter(a => a.id != id);
+    await saveArticles(filtered);
+  }
+  
+  await renderAll();
   renderManageList();
 }
 
-// ── Init ──────────────────────────────────────────────────────
-renderAllCMSArticles();
-updateTOC();
+// Initial Load
+document.addEventListener('DOMContentLoaded', renderAll);
+
 </script>
 </body>
 </html>
